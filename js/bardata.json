@@ -1,0 +1,16 @@
+[
+ 	{"name":"Bestellmenge geändert","value":"50"},
+	{"name":"Bestellposition erstellt","value":"45"},
+	{"name":"Bestellposition storniert","value":"75"},
+	{"name":"Bestellung erstellt","value":"10"},
+	{"name":"Bestellung freigegeben","value":"9"},
+	{"name":"Kreditor erstellt","value":"115"},
+	{"name":"Kreditor gesperrt","value":"10"},
+	{"name":"Preis geändert","value":"10"},
+	{"name":"Rechnung eingegangen","value":"91"},
+	{"name":"Rechnung gestellt","value":"13"},
+	{"name":"Ware eingegangen","value":"45"},
+	{"name":"Zahlung durchgeführt","value":"55"},
+	{"name":"Kreditor entsperrt","value":"19"},
+	{"name":"Bestellung storniert","value":"76"}
+]

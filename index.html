@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="utf-8">
+        <title>Process-Miner</title>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=none">
+		<script src="js/eventdata.json"></script>
+		<script src="js/eventgraph.js"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    </head>
+	<body>
+
+	   <section id="menubar">
+            <ul>
+                <li><a class="menubutton" href="#menu"><img src="images/menu.png" alt="menu"/></a></li>
+            </ul>
+        </section>
+        <header>
+            <h1>Process Miner</h1>
+        </header>
+		<nav class="nav">
+     		<label for="caseID">Case:</label>
+    		<input id="caseID" type = "text" >
+
+    		<label for="abdeckung" class="abstand">Abdeckung:</label>
+    		<input id="abdeckung" type = "text" value ="1">
+
+    		<input type="radio" id="time" name="type" checked="checked" class="radio"><label for="time"> Zeit</label>
+    		<input type="radio" id="num" name="type"><label for="frequency" >  Anzahl</label>
+
+    		<input type = "button" value="Apply" onclick="clickMe()" class="button"/>
+    		<input type = "button" value="Reset" onclick="reset()" class="button"/>
+        </nav>
+		<section id="main"> 
+			<article>
+				<!--<h2>Process Query Language</h2>-->
+				<div class="language">
+					<h2>Process Query</h2>
+						<label>Auswahl:
+							<select name="Auswahl" id="yesNo" size="1">
+								<option value=""></option>
+								<option value=!>nicht</option>
+							</select>	
+							<select id="query" size="1">
+								<option value="">Select</option>
+								<option value=*>Alle</option>
+								<option value=2>Bestellposition erstellt</option>
+								<option value=3>Bestellposition storniert</option>
+								<option value=4>Bestellung erstellt</option>
+								<option value=5>Bestellung freigegeben</option>
+								<option value=6>Kreditor erstellt</option>
+								<option value=7>Kreditor gesperrt</option>
+								<option value=8>Preis geändert</option>
+								<option value=9>Rechnung eingegangen</option>
+								<option value=10>Rechnung gestellt</option>
+								<option value=11>Ware eingegangen</option>
+								<option value=12>Zahlung durchgeführt</option>
+								<option value=13>Kreditor entsperrt</option>
+								<option value=14>Bestellung storniert</option>
+								<option value=15>Bestellmenge geändert</option>
+							</select>
+							<select id="Übergang" size="1">
+								<option value="">Select</option>
+								<option value="->">Übergang</option>
+							</select>
+							<button onclick="kum()" >Submit</button>
+							<button onclick="reset()" >Reset</button>
+						</label>
+					<div id="request"></div>
+				</div>
+				<div id="chart">
+					<script type="text/javascript">
+						$.getJSON("js/eventdata.json",function(json){
+							graph(json,850,580);
+						});
+					</script>
+				</div>
+			</article>
+			<aside>
+				<div id="e3">
+					<div id="barchart"></div>
+				</div>
+				<div id ="mitte">
+					<button id="Matrix_Btn">Matrix</button>
+					<button id="Abdeckung_Btn">Abdeckung</button>
+				</div>
+				<div id= "unten">
+					<div id="e2" >
+						<h3>Matrix???</h3>
+					</div>
+					<div id="e4">
+    					<h3>Abdeckungsdiagramm</h3>
+					</div>
+				</div>
+			</aside>
+        </section>
+		<script>window.jquery || document.write('<script src="js/jquery-3.1.0.js"><\/script>');</script>
+		<script type="text/javascript">
+            $(document).ready(function(){
+                $('.menubutton').click(function(){
+                    $('nav').slideToggle('slow');
+                });
+          	});
+        </script>
+		<script>
+			//window.on("resize", resize());
+		</script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<!--<script src="js/abdeckungsdiagramm.js"></script>-->
+		<script src="js/barchart.js"></script>
+		<script src="js/query.js"></script>
+		<script src="js/change.js"></script>
+		<script src="js/resize.js"></script>
+	</body>
+	<footer>
+    	<ul>
+     		<li>&copy; 2016 Grurl, Heindl, Dafalias</li>
+        </ul>
+	</footer>
+</html>

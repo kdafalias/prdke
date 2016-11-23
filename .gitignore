@@ -1,0 +1,9 @@
+lib/PHPExcel/Documentation/
+importer/files/data.xlsx
+importer/files/~$data.xlsx
+lib/PHPExcel/Examples/
+lib/PHPExcel/changelog.txt
+lib/PHPExcel/install.txt
+lib/PHPExcel/license.txt
+*.zip
+nbproject/
