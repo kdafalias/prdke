@@ -5,7 +5,6 @@
 	var edgelabels;
 
 function graph(data,width,height){
-	
 	// mittels width und height kann die größe des containers geändert werden
 	w = width;
     h = height;
@@ -43,7 +42,7 @@ function graph(data,width,height){
 		.links(links)
         .size([w,h])
         .linkDistance([linkDistance])
-        .charge([-500])
+        .charge([-600])
         .theta(0.1)
         .gravity(0.05)
         .start();
@@ -112,20 +111,6 @@ function graph(data,width,height){
                'dy':-5,
                'font-size':6,
                'fill':'black'});
-
-	
-	// Beschriftung der Kanten auf Zeit setzen
-    edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        .style("pointer-events", "none")
-        .text(function(d,i){return +d.time});
-	
-	// Beschriftung der Kanten auf Anzahl setzen
-	edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        .style("pointer-events", "none")
-        .text(function(d,i){return +d.num});
-
 	
 	// Pfeil 
     svg.append('defs').append('marker')
@@ -182,18 +167,21 @@ function graph(data,width,height){
                 }
         });
     });
-	function text(text){
-		console.log(edgelabels);
-	    /*edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        .style("pointer-events", "none")
-        .text(function(d,i){return +d.time});*/
-		// Beschriftung der Kanten auf Anzahl setzen
-	/*edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        .style("pointer-events", "none")
-        .text(function(d,i){return +d.num});*/
-	};
-
 }
-
+	function text(){
+		// graph ready boolean= true, false wenn alle elemente fertig geladen
+		if(document.getElementById("time").checked){
+			edgelabels.selectAll("textPath").remove();
+	    	edgelabels.append('textPath')
+        	.attr('xlink:href',function(d,i) {return '#edgepath'+i})
+        	.style("pointer-events", "none")
+        	.text(function(d,i){return +d.time})
+		}else{
+			// Beschriftung der Kanten auf Anzahl setzen
+			edgelabels.selectAll("textPath").remove();
+			edgelabels.append('textPath')
+				.attr('xlink:href',function(d,i) {return '#edgepath'+i})
+				.style("pointer-events", "none")
+				.text(function(d,i){return +d.num})
+		}		
+	};

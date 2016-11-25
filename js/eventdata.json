@@ -2,7 +2,7 @@
 	"nodes":[
 		{"name": "Ware eingegangen","value":"50"},
 		{"name": "Bestellung storniert","value":"15"},
-		{"name": "Rechnung eingegangen","value":"30"},
+		{"name": "Rechnung eingegangen","value":"30"},	
 		{"name": "End","value":"45"},
 		{"name": "Bestellposition erstellt","value":"90"},
 		{"name": "Start","value":"150"},
@@ -23,5 +23,20 @@
 		{"source": "Start", "target": "Kreditor erstellt","time":"15","num":"7"},
 		{"source": "Kreditor erstellt", "target": "Bestellung erstellt","time":"37","num":"36"},
 		{"source": "Bestellung erstellt", "target": "Ware eingegangen","time":"45","num":"56"}
+	],
+	"Dependency":[
+		{"FirstEventName": "Ware eingegangen", "SecondEventName": "Bestellung storniert","num":8},
+		{"FirstEventName": "Bestellung storniert", "SecondEventName":"Ware eingegangen","num":15},
+		{"FirstEventName": "Ware eingegangen", "SecondEventName": "Rechnung eingegangen","num":30},
+		{"FirstEventName": "Ware eingegangen", "SecondEventName": "Bestellung storniert","num":19},
+		{"FirstEventName": "Ware eingegangen", "SecondEventName": "End","num":5},
+		{"FirstEventName": "Rechnung eingegangen", "SecondEventName": "Bestellposition erstellt","num":50},
+		{"FirstEventName": "Rechnung eingegangen", "SecondEventName":"Bestellposition erstellt","num":8},
+		{"FirstEventName": "Bestellung storniert", "SecondEventName": "End","num":10},
+		{"FirstEventName": "Bestellposition erstellt", "SecondEventName": "Bestellung erstellt","num":90},
+		{"FirstEventName": "Bestellposition erstellt", "SecondEventName": "Ware eingegangen","num":5},
+		{"FirstEventName": "Start", "SecondEventName": "Kreditor erstellt","num":7},
+		{"FirstEventName": "Kreditor erstellt", "SecondEventName": "Bestellung erstellt","num":13},
+		{"FirstEventName": "Bestellung erstellt", "SecondEventName": "Ware eingegangen","num":10}
 	]
 }

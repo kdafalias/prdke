@@ -1,8 +1,7 @@
-(function(){
+function bchart(json){
 	var chart = d3.select("#barchart");
-	
-	d3.json("js/bardata.json", function(data){
-		
+	d3.json(json, function(d){
+		data=json.nodes;
 		// konvertieren zu nummer
 		data.forEach(function(d){
 			d.value=+d.value;
@@ -41,4 +40,4 @@
 		});
 	
 	});
-})();
+};

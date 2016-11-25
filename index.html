@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!--https://github.com/sghall/d3-chord-diagrams/blob/master/data/coffee.csv-->
 <html>
     <head>
 		<meta charset="utf-8">
@@ -7,8 +8,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=none">
 		<script src="js/eventdata.json"></script>
 		<script src="js/eventgraph.js"></script>
+		<script src="js/queue.js"></script>
+		<script src="js/underscore.js"></script>
+		<script src="js/barchart.js"></script>
+		<script src="js/chord.js"></script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="lib/d3.js"></script>
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     </head>
 	<body>
@@ -28,8 +34,8 @@
     		<label for="abdeckung" class="abstand">Abdeckung:</label>
     		<input id="abdeckung" type = "text" value ="1">
 
-    		<input type="radio" id="time" name="type" checked="checked" class="radio"><label for="time"> Zeit</label>
-    		<input type="radio" id="num" name="type"><label for="frequency" >  Anzahl</label>
+    		<input type="radio" id="time" name="type" onChange="text()" checked="checked" class="radio"><label for="time"> Zeit</label>
+    		<input type="radio" id="anz" name="type" onChange="text()" ><label for="frequency" >  Anzahl</label>
 
     		<input type = "button" value="Apply" onclick="clickMe()" class="button"/>
     		<input type = "button" value="Reset" onclick="reset()" class="button"/>
@@ -75,7 +81,12 @@
 					<script type="text/javascript">
 						$.getJSON("js/eventdata.json",function(json){
 							graph(json,850,580);
+							text("time");
+							bchart(json);
+							chord(json);
 						});
+						
+
 					</script>
 				</div>
 			</article>
@@ -89,7 +100,7 @@
 				</div>
 				<div id= "unten">
 					<div id="e2" >
-						<h3>Matrix???</h3>
+						 <div id="tooltip"></div>
 					</div>
 					<div id="e4">
     					<h3>Abdeckungsdiagramm</h3>
@@ -107,12 +118,12 @@
         </script>
 		<script>
 			//window.on("resize", resize());
+			//bchart("js/eventdata.json");
 		</script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script src="https://d3js.org/d3.v3.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 		<!--<script src="js/abdeckungsdiagramm.js"></script>-->
-		<script src="js/barchart.js"></script>
 		<script src="js/query.js"></script>
 		<script src="js/change.js"></script>
 		<script src="js/resize.js"></script>
