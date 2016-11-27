@@ -34,7 +34,7 @@ function drawChords (matrix, mmap) {
             .attr("height", h)
           .append("svg:g")
             .attr("id", "circle")
-            .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+            .attr("transform", "translate(" + w / 2 + "," + ((h / 2)+15) + ")");	//chrod diagramm versetzen
             svg.append("circle")
                 .attr("r", r0 + 20);
         var rdr = chordRdr(matrix, mmap);

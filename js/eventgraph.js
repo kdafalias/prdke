@@ -8,7 +8,7 @@ function graph(data,width,height){
 	// mittels width und height kann die größe des containers geändert werden
 	w = width;
     h = height;
-    linkDistance=150;
+    linkDistance=120;
 
     var colors = d3.scale.category10();
     var svg = d3.select("#chart").append("svg").attr({"width":w,"height":h});
@@ -107,8 +107,8 @@ function graph(data,width,height){
         .style("pointer-events", "none")
         .attr({'class':'edgelabel',
                'id':function(d,i){return 'edgelabel'+i},
-               'dx':100,
-               'dy':-5,
+               'dx':85,
+               'dy':-8,
                'font-size':6,
                'fill':'black'});
 	
@@ -184,4 +184,7 @@ function graph(data,width,height){
 				.style("pointer-events", "none")
 				.text(function(d,i){return +d.num})
 		}		
+	};
+	function MTime(data){
+			$("#MTime .txt").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
 	};

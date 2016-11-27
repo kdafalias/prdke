@@ -12,6 +12,7 @@
 		<script src="js/underscore.js"></script>
 		<script src="js/barchart.js"></script>
 		<script src="js/chord.js"></script>
+		<script src="js/coverage.js"></script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script src="https://d3js.org/d3.v3.min.js"></script>
 		<script src="lib/d3.js"></script>
@@ -77,16 +78,19 @@
 						</label>
 					<div id="request"></div>
 				</div>
+				<div id="MTime">
+					 <span class="txt"></span>
+				</div>
 				<div id="chart">
 					<script type="text/javascript">
 						$.getJSON("js/eventdata.json",function(json){
 							graph(json,850,580);
-							text("time");
+							MTime(json);
+							text();
 							bchart(json);
 							chord(json);
+							coverage(json);
 						});
-						
-
 					</script>
 				</div>
 			</article>
@@ -103,7 +107,7 @@
 						 <div id="tooltip"></div>
 					</div>
 					<div id="e4">
-    					<h3>Abdeckungsdiagramm</h3>
+    					<!--<h3>Abdeckungsdiagramm</h3>-->
 					</div>
 				</div>
 			</aside>
