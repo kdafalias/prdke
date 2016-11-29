@@ -9,5 +9,6 @@
 include_once dirname(__FILE__).'/cExcelImport.inc.php';
 
 $oExcelImport = new cExcelImport();
-$oExcelImport->main();
+#$oExcelImport->importData();
+$oExcelImport->findCases();
 
