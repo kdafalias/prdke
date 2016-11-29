@@ -21,7 +21,39 @@ class cExcelImport extends cGeneric
         array('rowstart'=>2,'cols'=>7, 'tablename'=>'Zahlung', 'mandatory'=>array('RechnNr','ZahlTS'), 'fields'=>array('ID', 'RechNr', 'Betrag', 'Waehrung', 'ZahlTS', 'ZahlUSR', 'KredNr'))
     );
 
+  /**
+   * Holt alle zusammengehörenden Aktivitäten und füllt das Eventlog
+   */
+  public function fillEventlog()
+  {
+    $this->oDB->query('TRUNCATE eventlog');
+    $sQuery = "SELECT * FROM aktivitaeten ORDER BY ID";
+    $oTable = $this->oDB->query($sQuery);
+    while($aRow = $oTable->fetch_assoc())
+    {
+      $sWhere = '';
+      for($i=1; $i<=3; $i++)
+      {
+        if(!empty($aRow['spalte'.$i]))
+        {
+          $sWhere .= ' AND '.$aRow['spalte'.$i].'="'.$aRow['wert'.$i].'"';
+        }
+      }
+      $sQueryAkt = "INSERT INTO eventlog(EventID, Timestamp, Aktivitaeten_ID, CaseID) "
+              . "SELECT CONCAT({$aRow['IDFeld']}) AS ID, {$aRow['TSFeld']}, {$aRow['ID']}, CaseID FROM {$aRow['tabelle']} WHERE 1=1 $sWhere;";
+      $this->oDB->query($sQueryAkt);
+      echo($sQueryAkt."<br>");
+    }
+  }
   
+  
+  /**
+   * Rekursive Funktion
+   * 
+   * @param array $aTable Unterzweig des Table-Baums
+   * @param array $aID IDs des übergeordneten Blatts 
+   * @param integer $iParentCaseID Case-ID der Wurzel des Teilbaums
+   */
   private function findCaseTable($aTable, $aID = array(), $iParentCaseID = null)
   {
     $sIdName = implode(',',$aTable['idname']);
@@ -64,7 +96,10 @@ class cExcelImport extends cGeneric
       }
     }
   }
-    
+  
+  /**
+   * Iteriert durch die Tabellen und ruft die rekursive Funktion zur Case-Suche auf
+   */
   public function findCases()
   {
     $bAllCasesSet = false;
@@ -90,13 +125,15 @@ class cExcelImport extends cGeneric
   }
   
   /**
-   * Haupt-Methode
+   * Importiert die Excel-Daten in die Datenbank
    */
   public function importData()
   {
+    // Alle Namen von USR-ID-Feldern in den Excel-Tabellen
     $aUserFields = array(
       'ErstellUSR', 'FreigabeUSR', 'ZahlUSR' ,'AenderUSR'
     );
+    // Alle Namen von Timestamp-Feldern
     $aTimestampFields = array(
         'ErstellTS', 'AenderTS', 'EingangTS', 'ZahlTS', 'FreigabeTS'
     );
@@ -112,61 +149,64 @@ class cExcelImport extends cGeneric
       echo($this->oDB->error." ({$this->oDB->errno})<br>");
       echo($sQuery."<br>");
     }
-    foreach($oImportExcel->getWorksheetIterator() as $oWorksheet)
+    foreach($oImportExcel->getWorksheetIterator() as $iWorksheetNum=>$oWorksheet)
     {
-      echo($oWorksheet->getTitle()."<br>");
-      $sQuery = "TRUNCATE TABLE {$this->aSheets[$i]['tablename']};";
-      $this->oDB->query($sQuery);
-      if(!$hResult = $this->oDB->query($sQuery))
+      // 1. Worksheet nicht
+      if($iWorksheetNum)
       {
-        echo("Fehler beim Leeren der Tabellen<br>");
-        echo($this->oDB->error." ({$this->oDB->errno})<br>");
-        echo($sQuery."<br>");
-      }
-      
-      $iHighestRow = $oWorksheet->getHighestRow();
-      for($iRow = $this->aSheets[$i]['rowstart']; $iRow<=$iHighestRow; $iRow++)
-      {
-        $sValues = '';
-        $bHasValue = false;
-        for($j=0; $j<$this->aSheets[$i]['cols']; $j++)
+        echo($oWorksheet->getTitle()." $iWorksheetNum<br>");
+        $sQuery = "TRUNCATE TABLE {$this->aSheets[$i]['tablename']};";
+        $this->oDB->query($sQuery);
+        if(!$hResult = $this->oDB->query($sQuery))
         {
-          $sValues .= empty($sValues) ? '' : ',';
-          $sValue = $oWorksheet->getCellByColumnAndRow($j, $iRow)->getValue();
-          if($this->aSheets[$i]['fields'][$j] == 'AenderTS') echo ($sValue."<br>");
-          #echo($sValue."<br>");
-          $bHasValue |= strlen($sValue) > 0;
-          if(in_array($this->aSheets[$i]['fields'][$j], $aTimestampFields) && strlen($sValue))
+          echo("Fehler beim Leeren der Tabellen<br>");
+          echo($this->oDB->error." ({$this->oDB->errno})<br>");
+          echo($sQuery."<br>");
+        }
+
+        $iHighestRow = $oWorksheet->getHighestRow();
+        for($iRow = $this->aSheets[$i]['rowstart']; $iRow<=$iHighestRow; $iRow++)
+        {
+          $sValues = '';
+          $bHasValue = false;
+          for($j=0; $j<$this->aSheets[$i]['cols']; $j++)
           {
-            $sValue = ($sValue - 25569) * 86400 - 7200;
-            $sValues .= 'FROM_UNIXTIME('. $sValue . ')';
-          }
-          else
-          {
-            $sValues .= '"' . $sValue . '"';
-          }
-          // User-Tabelle füllen
-          if(in_array($this->aSheets[$i]['fields'][$j], $aUserFields) && strlen($sValue))
-          {
-            $sQuery = "INSERT IGNORE INTO USR VALUES('$sValue')";
-            if(!$hResult = $this->oDB->query($sQuery))
+            $sValues .= empty($sValues) ? '' : ',';
+            $sValue = $oWorksheet->getCellByColumnAndRow($j, $iRow)->getValue();
+            if($this->aSheets[$i]['fields'][$j] == 'AenderTS') echo ($sValue."<br>");
+            $bHasValue |= strlen($sValue) > 0;
+            if(in_array($this->aSheets[$i]['fields'][$j], $aTimestampFields) && strlen($sValue))
             {
-              echo("Fehler beim Einfügen in User-Tabelle<br>");
-              echo($this->oDB->error." ({$this->oDB->errno})<br>");
+              $sValue = ($sValue - 25569) * 86400 - 7200;
+              $sValues .= 'FROM_UNIXTIME('. $sValue . ')';
+            }
+            else
+            {
+              $sValues .= '"' . ($sValue) . '"';
+            }
+            // User-Tabelle füllen
+            if(in_array($this->aSheets[$i]['fields'][$j], $aUserFields) && strlen($sValue))
+            {
+              $sQuery = "INSERT IGNORE INTO USR VALUES('$sValue')";
+              if(!$hResult = $this->oDB->query($sQuery))
+              {
+                echo("Fehler beim Einfügen in User-Tabelle<br>");
+                echo($this->oDB->error." ({$this->oDB->errno})<br>");
+              }
             }
           }
-        }
-        $sFields = implode(',', $this->aSheets[$i]['fields']);
-        $sQuery = "INSERT INTO {$this->aSheets[$i]['tablename']}({$sFields}) VALUES($sValues)";
-        echo($sQuery."<br>");
-        // Leerzeilen in Excel ignorieren
-        if($bHasValue) 
-        {
-          if(!$hResult = $this->oDB->query($sQuery))
+          $sFields = implode(',', $this->aSheets[$i]['fields']);
+          $sQuery = "INSERT INTO {$this->aSheets[$i]['tablename']}({$sFields}) VALUES($sValues)";
+          echo($sQuery."<br>");
+          // Leerzeilen in Excel ignorieren
+          if($bHasValue) 
           {
-            echo("Fehler beim Einfügen in Tabelle {$aSheets[$i]['tablename']}<br>");
-            echo($this->oDB->error." ({$this->oDB->errno})<br>");
-            echo($sQuery."<br>");
+            if(!$hResult = $this->oDB->query($sQuery))
+            {
+              echo("Fehler beim Einfügen in Tabelle {$aSheets[$i]['tablename']}<br>");
+              echo($this->oDB->error." ({$this->oDB->errno})<br>");
+              echo($sQuery."<br>");
+            }
           }
         }
       }
