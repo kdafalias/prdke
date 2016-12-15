@@ -21,30 +21,6 @@ class cExcelImport extends cGeneric
         array('rowstart'=>2,'cols'=>7, 'tablename'=>'Zahlung', 'mandatory'=>array('RechnNr','ZahlTS'), 'fields'=>array('ID', 'RechNr', 'Betrag', 'Waehrung', 'ZahlTS', 'ZahlUSR', 'KredNr'))
     );
 
-  /**
-   * Holt alle zusammengehörenden Aktivitäten und füllt das Eventlog
-   */
-  public function fillEventlog()
-  {
-    $this->oDB->query('TRUNCATE eventlog');
-    $sQuery = "SELECT * FROM aktivitaeten ORDER BY ID";
-    $oTable = $this->oDB->query($sQuery);
-    while($aRow = $oTable->fetch_assoc())
-    {
-      $sWhere = '';
-      for($i=1; $i<=3; $i++)
-      {
-        if(!empty($aRow['spalte'.$i]))
-        {
-          $sWhere .= ' AND '.$aRow['spalte'.$i].'="'.$aRow['wert'.$i].'"';
-        }
-      }
-      $sQueryAkt = "INSERT INTO eventlog(EventID, Timestamp, Aktivitaeten_ID, CaseID) "
-              . "SELECT CONCAT({$aRow['IDFeld']}) AS ID, {$aRow['TSFeld']}, {$aRow['ID']}, CaseID FROM {$aRow['tabelle']} WHERE 1=1 $sWhere;";
-      $this->oDB->query($sQueryAkt);
-      echo($sQueryAkt."<br>");
-    }
-  }
   
   
   /**
@@ -57,18 +33,20 @@ class cExcelImport extends cGeneric
   private function findCaseTable($aTable, $aID = array(), $iParentCaseID = null)
   {
     $sIdName = implode(',',$aTable['idname']);
-    $sQuery = "SELECT $sIdName FROM {$aTable['table']} WHERE 1=1 ";    
-    foreach($aID as $sIndex=>$iID)
+    $sQueryAct = "SELECT * FROM aktivitaeten WHERE tabelle = '{$aTable['table']}'";
+    $aActivities = array();
+    $oTableAct = $this->oDB->query($sQueryAct);
+    while($aRowAct = $oTableAct->fetch_assoc())
     {
-      $sQuery .= " AND $sIndex = $iID";
-      echo($sIndex."<br>");
+      $aActivities[] = $aRowAct;
     }
-    echo('<pre>');
-    print_r($aTable);
-    print_r($aID);
-    echo('</pre>');    
+    $sQuery = "SELECT $sIdName FROM {$aTable['table']} WHERE 1=1 ";    
+    foreach($aTable['fkname'] as $sIndex)
+    {
+      $sQuery .= " AND $sIndex = ".$aID[$sIndex];
+    }
 
-    echo($sQuery."<br>");
+    echo($sQuery." kweri<br>");
     $oTable = $this->oDB->query($sQuery);
     while($aRow = $oTable->fetch_assoc())
     {
@@ -81,6 +59,10 @@ class cExcelImport extends cGeneric
       {
         $iCaseID = $iParentCaseID;
       }
+      echo('<pre>');
+      print_r($aRow);
+      echo('</pre>');
+      echo($iCaseID."<br>");
       $sWhere = '';
       $sID = '';
       foreach($aTable['idname'] as $iIDName)
@@ -89,6 +71,13 @@ class cExcelImport extends cGeneric
         $sID .= $aRow[$iIDName];
       }
       $this->oDB->query("UPDATE {$aTable['table']} SET CaseID = $iCaseID WHERE 1=1 $sWhere");
+      foreach($aActivities as $aRowAct)
+      {
+        $sQueryIns = "INSERT INTO eventlog(EventID, Timestamp, Aktivitaeten_ID, CaseID) "
+                . "SELECT CONCAT({$sIdName}) AS ID, {$aRowAct['TSFeld']}, {$aRowAct['ID']}, $iCaseID FROM {$aRowAct['tabelle']} WHERE 1=1 $sWhere;";
+        $this->oDB->query($sQueryIns);
+        echo($sQueryIns."<br>");
+      }
       $this->oDB->query("UPDATE Aenderungshistorie SET CaseID = $iCaseID WHERE Tabelle = '{$aTable['table']}' AND ID = {$sID}");
       foreach($aTable['children'] as $aChildTable)
       {
@@ -103,20 +92,23 @@ class cExcelImport extends cGeneric
   public function findCases()
   {
     $bAllCasesSet = false;
+    $sQuery = "SET FOREIGN_KEY_CHECKS = 0;";
+    $this->oDB->query($sQuery);
     $this->oDB->query("TRUNCATE Cases");
-    $aTables = array(
-      array('table'=>'Kreditor', 'idname'=>array('KredNr'), 'fkname'=>array(),
-          'children'=>array()),
-      array('table'=>'Bestellung', 'idname'=>array('BestellNr'), 'fkname'=>array(), 
-          'children'=>array(
-              array('table'=>'Bestellposition', 'idname'=>array('PosNr', 'BestellNr'),'fkname'=>array('BestellNr'), 'children'=>array()),
-              array('table'=>'Wareneingang', 'idname'=>array('ID'),'fkname'=>array('BestellNr'), 'children'=>array()),
-              array('table'=>'Rechnung', 'fkname'=>array('BestellNr'),'idname'=>array('RechNr'),
-                  'children'=>array(
-                      array('table'=>'Zahlung', 'idname'=>array('ID'), 'fkname'=>array('RechNr'), 'children'=>array())
-                  )),
-              
-          ))
+    $this->oDB->query('TRUNCATE eventlog');
+    
+    $aTables = array(      
+          array('table'=>'Bestellung', 'idname'=>array('BestellNr', 'KredNr'), 'fkname'=>array(), 
+              'children'=>array(
+                  array('table'=>'Kreditor', 'idname'=>array('KredNr'), 'fkname'=>array('KredNr'),'children'=>array()),
+                  array('table'=>'Bestellposition', 'idname'=>array('PosNr', 'BestellNr'),'fkname'=>array('BestellNr'), 'children'=>array()),
+                  array('table'=>'Wareneingang', 'idname'=>array('ID'),'fkname'=>array('BestellNr'), 'children'=>array()),
+                  array('table'=>'Rechnung', 'fkname'=>array('BestellNr'),'idname'=>array('RechNr'),
+                      'children'=>array(
+                          array('table'=>'Zahlung', 'idname'=>array('ID'), 'fkname'=>array('RechNr'), 'children'=>array())
+                      ))              
+          ))              
+       
     );
     foreach($aTables as $aTable)
     {
@@ -135,7 +127,7 @@ class cExcelImport extends cGeneric
     );
     // Alle Namen von Timestamp-Feldern
     $aTimestampFields = array(
-        'ErstellTS', 'AenderTS', 'EingangTS', 'ZahlTS', 'FreigabeTS'
+        'ErstellTS', 'AenderTS', 'EingangTS', 'ZahlTS', 'FreigabeTS', 'EingangsDat', 'RechnungsDatum'
     );
     $oImportExcel = PHPExcel_IOFactory::load(dirname(__FILE__).'/files/data.xlsx');
     $i = 0;
