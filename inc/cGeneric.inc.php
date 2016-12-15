@@ -18,6 +18,9 @@ class cGeneric
     if($this->oDB->connect_errno) {
       echo("Datenbank-Verbindungsfehler<br>");
     }
+    $this->oDB->set_charset("utf8");
+    $this->oDB->init();
+    
   }
   
   public function __construct() {

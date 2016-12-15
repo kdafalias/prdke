@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-include_once dirname(__FILE__).'/cExcelImport.inc.php';
+include_once dirname(__FILE__).'/../inc/cGeneric.inc.php';
 
-$oExcelImport = new cExcelImport();
-$oExcelImport->importData();
-$oExcelImport->findCases();
-
+class cExtractProcess extends cGeneric
+{
+  
+}
