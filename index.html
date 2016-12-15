@@ -74,6 +74,7 @@
 								<option value="->">Übergang</option>
 							</select>
 							<button onclick="kum()" >Submit</button>
+							<button onclick="return()" >Return</button>
 							<button onclick="reset()" >Reset</button>
 						</label>
 					<div id="request"></div>
@@ -84,7 +85,7 @@
 				<div id="chart">
 					<script type="text/javascript">
 						$.getJSON("js/eventdata.json",function(json){
-							graph(json,850,580);
+							graph(json,1800,720);
 							MTime(json);
 							text();
 							bchart(json);
@@ -94,6 +95,9 @@
 					</script>
 				</div>
 			</article>
+			<div id="abstand">
+				<h2>Eventhäufigkeit</h2>
+			</div>
 			<aside>
 				<div id="e3">
 					<div id="barchart"></div>

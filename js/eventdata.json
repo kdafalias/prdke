@@ -40,13 +40,13 @@
 		{"FirstEventName": "Bestellung erstellt", "SecondEventName": "Ware eingegangen","num":10}
 	],
 	"Variation":[
-		{"VariationID": 1,"num":16},
-		{"VariationID": 2,"num":28},
-		{"VariationID": 3,"num":13},	
-		{"VariationID": 4,"num":5},
-		{"VariationID": 5,"num":16},
-		{"VariationID": 6,"num":9},
-		{"VariationID": 7,"num":7},
+		{"VariationID": 2,"num":16},
+		{"VariationID": 1,"num":28},
+		{"VariationID": 4,"num":13},	
+		{"VariationID": 7,"num":5},
+		{"VariationID": 3,"num":16},
+		{"VariationID": 5,"num":9},
+		{"VariationID": 6,"num":7},
 		{"VariationID": 8,"num":2}
 	],
 	"MeanRuntime":515

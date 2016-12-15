@@ -10,8 +10,8 @@ function coverage(json){
 		});
 		var count= data.length;
 		
-		data.sort(function(a,b){
-			return Number(a.VariationID)-Number(b.VariationID);
+		data.sort(function(b,a){
+			return Number(a.num)-Number(b.num);
 		})
 		
 		var bar = d3.select("#e4").selectAll("div")
