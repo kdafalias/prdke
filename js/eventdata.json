@@ -10,19 +10,19 @@
 		{"name": "Bestellung erstellt","value":10}
 	],
 	"edges":[
-		{"source": "Ware eingegangen", "target": "Bestellung storniert","time":10,"num":3},
-		{"source": "Bestellung storniert", "target": "Ware eingegangen","time":10,"num":3},
-		{"source": "Ware eingegangen", "target": "Rechnung eingegangen","time":20,"num":5},
-		{"source": "Ware eingegangen", "target": "Bestellung storniert","time":9,"num":8},
-		{"source": "Ware eingegangen", "target": "End","time":59,"num":9},
-		{"source": "Rechnung eingegangen", "target": "Bestellposition erstellt","time":3,"num":6},
-		{"source": "Rechnung eingegangen", "target": "Bestellposition erstellt","time":1,"num":8},
-		{"source": "Bestellung storniert", "target": "End","time":18,"num":9},
-		{"source": "Bestellposition erstellt", "target": "Bestellung erstellt","time":17,"num":16},
-		{"source": "Bestellposition erstellt", "target": "Ware eingegangen","time":16,"num":18},
-		{"source": "Start", "target": "Kreditor erstellt","time":15,"num":7},
-		{"source": "Kreditor erstellt", "target": "Bestellung erstellt","time":37,"num":36},
-		{"source": "Bestellung erstellt", "target": "Ware eingegangen","time":45,"num":56}
+		{"source": "Ware eingegangen", "target": "Bestellung storniert","time":10,"num":3,"type":"normal"},
+		{"source": "Bestellung storniert", "target": "Ware eingegangen","time":10,"num":3,"type":"normal"},
+		{"source": "Ware eingegangen", "target": "Rechnung eingegangen","time":20,"num":5,"type":"normal"},
+		{"source": "Ware eingegangen", "target": "Bestellung storniert","time":9,"num":8,"type":"normal"},
+		{"source": "Ware eingegangen", "target": "End","time":59,"num":9,"type":"end"},
+		{"source": "Rechnung eingegangen", "target": "Bestellposition erstellt","time":3,"num":6,"type":"normal"},
+		{"source": "Rechnung eingegangen", "target": "Bestellposition erstellt","time":1,"num":8,"type":"normal"},
+		{"source": "Bestellung storniert", "target": "End","time":18,"num":9,"type":"end"},
+		{"source": "Bestellposition erstellt", "target": "Bestellung erstellt","time":17,"num":16,"type":"normal"},
+		{"source": "Bestellposition erstellt", "target": "Ware eingegangen","time":16,"num":18,"type":"normal"},
+		{"source": "Start", "target": "Kreditor erstellt","time":15,"num":7,"type":"start"},
+		{"source": "Kreditor erstellt", "target": "Bestellung erstellt","time":37,"num":36,"type":"normal"},
+		{"source": "Bestellung erstellt", "target": "Ware eingegangen","time":45,"num":56,"type":"normal"}
 	],
 	"Dependency":[
 		{"FirstEventName": "Ware eingegangen", "SecondEventName": "Bestellung storniert","num":8},

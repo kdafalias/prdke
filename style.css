@@ -195,14 +195,34 @@ nav ul li a:hover{
     padding:1em;
 }
 /*Eventgraph*/
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+#start {
+  fill: red;
+}
+
+.link.start {
+  stroke: red;
+}
+
+.link.end {
+  stroke-dasharray: 0,2 1;
+}
+
 circle {
   fill: #ccc;
-  stroke: #fff;
-  stroke-width: 3px;
+  stroke: #333;
+  stroke-width: 1.5px;
 }
-text{
-	font-size:80%;
-	font-weight: 500;
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
 text.nodelabel {
   	font: 10px sans-serif;

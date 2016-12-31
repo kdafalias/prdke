@@ -1,7 +1,8 @@
+
+var svg2;
 function chord(json){
 	
 	d3.json(json,function(error,data){
-		console.log(json.Dependency);
 		var mpr =chordMpr(json.Dependency);
 		  mpr
 		  .addValuesToMap('FirstEventName')
@@ -29,17 +30,17 @@ function drawChords (matrix, mmap) {
         var arc = d3.svg.arc()
             .innerRadius(r0)
             .outerRadius(r0 + 20);
-        var svg = d3.select("#e2").append("svg:svg")
+        svg2 = d3.select("#e2").append("svg:svg")
             .attr("width", w)
             .attr("height", h)
           .append("svg:g")
             .attr("id", "circle")
-            .attr("transform", "translate(" + ((w / 2)+650) +"," + ((h / 2)+50) + ")");	//chrod diagramm versetzen
-            svg.append("circle")
+            .attr("transform", "translate(" + ((w / 2)) +"," + ((h / 2)) + ")");	//chrod diagramm versetzen
+            svg2.append("circle")
                 .attr("r", r0 + 20);
         var rdr = chordRdr(matrix, mmap);
         chord.matrix(matrix);
-        var g = svg.selectAll("g.group")
+        var g = svg2.selectAll("g.group")
             .data(chord.groups())
           .enter().append("svg:g")
             .attr("class", "group")
@@ -61,7 +62,7 @@ function drawChords (matrix, mmap) {
                   + (d.angle > Math.PI ? "rotate(180)" : "");
             })
             .text(function(d) { return rdr(d).gname; });
-          var chordPaths = svg.selectAll("path.chord")
+          var chordPaths = svg2.selectAll("path.chord")
                 .data(chord.chords())
               .enter().append("svg:path")
                 .attr("class", "chord")
@@ -100,7 +101,13 @@ function drawChords (matrix, mmap) {
                   && p.target.index != i;
             });
           }
-      }
+	resizeChord();
+   }
+function resizeChord(){
+  width = document.getElementById('e2').offsetWidth, height = document.getElementById('e2').offsetHeight;
+  svg2.attr("transform", "translate(" + ((width / 2)) +"," + ((height / 2)) + ")");	
+
+};
 //*******************************************************************
 //  CHORD MAPPER 
 //*******************************************************************

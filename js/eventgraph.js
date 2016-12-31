@@ -1,19 +1,16 @@
-	var w;
-    var h;
+	var width;
+    var height;
 	var force;
 	var linkDistance;
 	var edgelabels;
+	var min_zoom = 0.1;
+	var max_zoom = 7;
+	var zoom;
 
 function graph(data,width,height){
-	// mittels width und height kann die größe des containers geändert werden
-	w = width;
-    h = height;
+		// mittels width und height kann die größe des containers geändert werden
     linkDistance=120;
-
-    var colors = d3.scale.category10();
-    var svg = d3.select("#chart").append("svg").attr({"width":w,"height":h});
-	
-	// Links müssen gemapped werden, damit source und target gefunden werden können.
+		// Links müssen gemapped werden, damit source und target gefunden werden können.
 	var links = [];
 	data.edges.forEach(function(e) {
 		
@@ -26,165 +23,110 @@ function graph(data,width,height){
 		targetNode = data.nodes.filter(function(n) {
 			return n.name === e.target;
 		})[0];
-		
-		// Verbindung einfügen, ev. absichern, falls keine ordentliche Verbindung zurückkommt
+		// Verbindung einfügen
     	links.push({
         	source: sourceNode,
         	target: targetNode,
         	time: e.time,
-			num: e.num
+			num: e.num,
+			type:e.type
     	});
 	});
-	
-	// force layout object erstellen und grundsätzliche properties definieren
-    force = d3.layout.force()
-        .nodes(data.nodes)
+
+	force = d3.layout.force()
+		.nodes(data.nodes)
 		.links(links)
-        .size([w,h])
-        .linkDistance([linkDistance])
-        .charge([-600])
-        .theta(0.1)
-        .gravity(0.05)
-        .start();
+		.size([width, height])
+		.linkDistance(linkDistance)
+		.charge(-height)
+		.on("tick", tick)
+		.start();
+	var colors = d3.scale.category10();
+	svg = d3.select("#chart").append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+	// Per-type markers, as they don't inherit styles.
+	svg.append("defs").selectAll("marker")
+		.data(["start", "normal", "end"])
+	  	.enter().append("marker")
+		.attr("id", function(d) { return d; })
+		.attr("viewBox", "0 -5 10 10")
+		.attr("refX", 15)
+		.attr("refY", -1.5)
+		.attr("markerWidth", 6)
+		.attr("markerHeight", 6)
+		.attr("orient", "auto")
+	  	.append("path")
+		.attr("d", "M0,-5L10,0L0,5");
+
+	var path = svg.append("g").selectAll("path")
+		.data(force.links())
+	  	.enter().append("path")
+		.attr("id", function(d) { return d.source.index + "_" + d.target.index; })
+		.attr("class", function(d) { return "link " + d.type; })
+		.attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+
+	var circle = svg.append("g").selectAll("circle")
+		.data(force.nodes())
+	  	.enter().append("circle")
+		.attr("r", 6)
+		.style("fill",function(d,i){return colors(i);})
+		.call(force.drag);
+
+	var text = svg.append("g").selectAll("text")
+		.data(force.nodes())
+	  	.enter().append("text")
+		.attr("x", 8)
+		.attr("y", ".31em")
+		.text(function(d) { return d.name; });
 	
-	// marker für edge setzen	
-    var edge = svg.selectAll("path")
-      .data(links)
-      .enter()
-      .append("line")
-      .attr("id",function(d,i) {return "edge"+i})
-      .attr('marker-end','url(#arrowhead)')
-      .style("stroke","#ccc")
-      .style("pointer-events", "none");
-    
-	// Kreis für Node zeichnen
-    var nodes = svg.selectAll("circle")
-      .data(data.nodes)
-      .enter()
-      .append("circle")
-      .attr({"r":11})
-      .style("fill",function(d,i){return colors(i);})
-      .call(force.drag);
-
-
-    var nodelabels = svg.selectAll(".nodelabel") 
-       .data(data.nodes)
-       .enter()
-       .append("text")
-       .attr({"x":function(d){return d.x;},
-              "y":function(d){return d.y;},
-              "class":"nodelabel",
-              "stroke":"black"})
-       		  .text(function(d){return d.name;});
+	edgelabels = svg.append("svg:g").selectAll("edgepath")
+    	.data(force.links())
+  		.enter().append("svg:text")
+    	.attr("class", "path_label")
+    	.append("svg:textPath")
+      	.attr("startOffset", "50%")
+      	.attr("text-anchor", "middle")
+      	.attr("xlink:href", function(d) { return "#" + d.source.index + "_" + d.target.index; })
+      	.style("fill", "#000")
+      	.style("font-family", "Arial")
+      	.text(function(d) { return d.num; });
 	
-	// Verbindungen zwischen nodes erstellen
-	// Beschriftung der Nodes ändern (edgepathtime/ edgepath)
-    var edgepaths = svg.selectAll(".edgepath")
-        .data(links)
-        .enter()
-        .append('path')
-		.attr({"d": function(d) {
-        	var dx = d.target.x - d.source.x,
-            dy = d.target.y - d.source.y,
-            dr = Math.sqrt(dx * dx + dy * dy);
-        	return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-    	},
-			/*.attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},*/
-        	'class':'edgepath',
-        	'fill-opacity':0,
-        	'stroke-opacity':0,
-        	'fill':'blue',
-        	'stroke':'red',
-        	'id':function(d,i) {return "edgepath"+i},
-			  })
-        .style("pointer-events", "none");
+	// Use elliptical arc path segments to doubly-encode directionality.
+	function tick() {
+	  	path.attr("d", linkArc);
+	  	circle.attr("transform", transform);
+	  	text.attr("transform", transform);
+		}
+	function linkArc(d) {
+	  var dx = d.target.x - d.source.x,
+		  dy = d.target.y - d.source.y,
+		  dr = Math.sqrt(dx * dx + dy * dy);
+	  return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+	}
 
-	//Beschriftung der Kanten platzieren und definieren
-	edgelabels = svg.selectAll(".edgelabel")
-        .data(links)
-        .enter()
-        .append('text')
-        .style("pointer-events", "none")
-        .attr({'class':'edgelabel',
-               'id':function(d,i){return 'edgelabel'+i},
-               'dx':85,
-               'dy':-8,
-               'font-size':6,
-               'fill':'black'});
-	
-	// Pfeil 
-    svg.append('defs').append('marker')
-        .attr({'id':'arrowhead',
-               'viewBox':'-0 -5 10 10',
-               'refX':23,
-               'refY':0,
-               'markerUnits':'strokeWidth',
-               'orient':'auto',
-               'markerWidth':10,
-               'markerHeight':10,
-               'xoverflow':'visible'})
-        .append('svg:path')
-            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#ccc')
-            .attr('stroke','#ccc');
-     
-
-   force.on("tick", function(){
-
-        edge.attr({"x1": function(d){return d.source.x;},
-                    "y1": function(d){return d.source.y;},
-                    "x2": function(d){return d.target.x;},
-                    "y2": function(d){return d.target.y;}
-        });
-
-        nodes.attr({"cx":function(d){return d.x;},
-                    "cy":function(d){return d.y;}
-        });
-
-        nodelabels.attr("x", function(d) { return d.x; }) 
-                  .attr("y", function(d) { return d.y; });
-
-         edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
-                                           //console.log(d)
-                                           return path});   
-	   
-	   /*edgepaths.attr("d", function(d) {
-        	var dx = d.target.x - d.source.x,
-            dy = d.target.y - d.source.y,
-            dr = Math.sqrt(dx * dx + dy * dy);
-        	return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;}); */
-
-
-        edgelabels.attr('transform',function(d,i){
-            if (d.target.x<d.source.x){
-                bbox = this.getBBox();
-                rx = bbox.x+bbox.width/2;
-                ry = bbox.y+bbox.height/2;
-                return 'rotate(180 '+rx+' '+ry+')';
-                }
-            else {
-                return 'rotate(0)';
-                }
-        });
-    });
+	function transform(d) {
+	  return "translate(" + d.x + "," + d.y + ")";
+	}
+	resizeEvent();
 }
-	function text(){
-		// graph ready boolean= true, false wenn alle elemente fertig geladen
-		if(document.getElementById("time").checked){
-			edgelabels.selectAll("textPath").remove();
-	    	edgelabels.append('textPath')
-        	.attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        	.style("pointer-events", "none")
-        	.text(function(d,i){return +d.time})
-		}else{
-			// Beschriftung der Kanten auf Anzahl setzen
-			edgelabels.selectAll("textPath").remove();
-			edgelabels.append('textPath')
-				.attr('xlink:href',function(d,i) {return '#edgepath'+i})
-				.style("pointer-events", "none")
-				.text(function(d,i){return +d.num})
-		}		
-	};
-	function MTime(data){
-			$("#MTime .txt").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
-	};
+// Text
+function text(){
+	// graph ready boolean= true, false wenn alle elemente fertig geladen
+	if(document.getElementById("time").checked){
+		edgelabels.text(function(d) { return d.num; })
+	}else{
+		// Beschriftung der Kanten auf Anzahl setzen
+		edgelabels.text(function(d) { return d.time; })
+	}		
+};
+function MTime(data){
+		$("#MTime .txt").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
+};
+function resizeEvent(){
+  width = document.getElementById('chart').offsetWidth, height = document.getElementById('chart').offsetHeight;
+  svg.attr('width', width).attr('height', height);
+  force.size([width, height]).resume();
+};
+
