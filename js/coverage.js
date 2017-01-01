@@ -2,7 +2,6 @@ function coverage(json){
 	var chart = d3.select("#e4");
 	d3.json(json, function(d){
 		data=json.Variation;
-		console.log(data);
 
 		// maximalen Wert berechnen
 		var maxVal=d3.max(data,function(d){

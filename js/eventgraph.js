@@ -46,7 +46,7 @@ function graph(data,width,height){
 		.attr("width", width)
 		.attr("height", height);
 
-	// Per-type markers, as they don't inherit styles.
+	// marker für unterschiedliche Verbindungstypen
 	svg.append("defs").selectAll("marker")
 		.data(["start", "normal", "end"])
 	  	.enter().append("marker")
@@ -66,12 +66,13 @@ function graph(data,width,height){
 		.attr("id", function(d) { return d.source.index + "_" + d.target.index; })
 		.attr("class", function(d) { return "link " + d.type; })
 		.attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
-
+	
 	var circle = svg.append("g").selectAll("circle")
 		.data(force.nodes())
 	  	.enter().append("circle")
 		.attr("r", 6)
-		.style("fill",function(d,i){return colors(i);})
+		//.style("fill",function(d,i){return colors(i);})	// verschiedene Farben der Nodes
+		.style("fill",function(d,i){if(d.name==="Start"){return "red"}else if(d.name==="End"){return "green"}else {return "grey"};})
 		.call(force.drag);
 
 	var text = svg.append("g").selectAll("text")
@@ -121,9 +122,15 @@ function text(){
 		edgelabels.text(function(d) { return d.time; })
 	}		
 };
+//Beschriftungen
 function MTime(data){
-		$("#MTime .txt").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
+	$("#navright .txt1").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
+	$("#navright .txt2").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
+	$("#navright .txt3").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
+	$("#navright .txt4").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
 };
+
+//resize Eventgraph
 function resizeEvent(){
   width = document.getElementById('chart').offsetWidth, height = document.getElementById('chart').offsetHeight;
   svg.attr('width', width).attr('height', height);

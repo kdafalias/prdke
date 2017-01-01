@@ -1,263 +1,138 @@
 body {
-    background-color: #99CCFF;
+	
+	background: rgb(39,95,111); /* IE6-9 */
     font-size: 100%; /* 16px wenn z.B. 2.5em heißt dass dass die diese um 2.5 vergrößert wird siehe h1 */
     margin: 0em;    /* alle angaben werden mit relativen angaben verändert, sobald font size geändert wird, gilt für alle */
     padding:0em;
 }
 h1{
-    font-size: 1.5em;
-    line-height: 2.5em;
-    font-family: arial, Helvetica, sans-serif;
-    font-weight: 70;
-	background-color: #99CCFF;
-    color:#010101;
-    margin:0em;
+	text-align:center;
+		letter-spacing: 0.2em;
+	color:rgb(160,223,241);
+	margin-top:0.1em;
+	margin-bottom:0.1em;
 }
 h2{
-    font-size: 1em;
-    line-height: 1.8em;
-    font-family: arial, Helvetica, sans-serif;
-    font-weight: 100;
-    color:#2F2D2C;
-    margin:0em;
-    padding:0.2em;
-    text-align: center;
-}
-h3{
-    font-size: 0.9em;
-    line-height: 0.9em;
-    font-family: arial, Helvetica, sans-serif;
-    font-weight: 100;
-    color:#2F2D2C;
-    margin:0em;
-    padding:0.6em;
-    text-align: left;
-}
-p{
-    line-height: 1.25em;
-    font-family: arial, Helvetica, sans-serif;
-    font-weight: 100;
-    color:#2F2D2C;
-    margin:0em;
-    padding:0.5em;
-    text-align: justify; /*blocksatz*/
-}
-ul{
-    margin:0px; 
-    padding:0px;
-}
-li{
-    list-style: square; /*quadratische From der Auflistungspunkte*/
-    font-family: arial, Helvetica, sans-serif;
-    font-weight: 100;
-    color:#2F2D2C;
-    line-height: 1.25em;
-    margin:0em;
-    padding:0em;
-    margin: 0.313em 0em 0,313em 0em; 
-}
-img{
-    width:auto;
-    height:auto;
-    max-width: 100%;
-}
-a{
-    text-decoration: none;
-}
-/*On Top Bar*/
-#menubar{
-    display:block;
-    background:#FFFFFF;
-}
-#menubar ul{
-    display:block;
-    width:2em;
-    padding:0.9em;
-}
-#menubar ul li{
-    display:inline;
-}
-#menubar ul li a.menubutton{
-    display:none;
-}
-input.button {
-    display:inline-block;
-    margin:8px;
-    text-decoration:none;
-    font-family:arial, Helvetica, sans-serif;
-    font-size:14px;
-    border:0px solid #819FF7;
-    border-radius:15px;
-    color:#2F2D2C;
-    background-color:#819FF7;
-    padding:5px 15px;
-    font-weight:bold;
-    box-shadow:3px 3px 4px #8CA0B2;
-    text-shadow:1px 1px 2px #6E91B2;
-    margin-left: 20px;
-}
-input.button:hover{
-    background-color:#FFFFFF;
-}
-input[type="text"] {
-    padding: 5px;
-    border: solid 1px #fff;
-    box-shadow: inset 1px 1px 1px 1px #707070;
-    transition: box-shadow 0.3s;
-}
-
-input[type="text"]:focus,
-input[type="text"].focus {
-    box-shadow: inset 1px 1px 2px 0 #c9c9c9;
-}
-/*header*/
-header{
-    display:block;
-    background:#FFFFFF;
-    text-align:center;
+	letter-spacing: 0.2em;
+	background: rgb(12,50,61); /* IE6-9 */
+	text-align:center;
+	color:#fff;
+	margin-top:0;
 }
 nav{
-    display:block;
-    height:2.6em;
-    background:#FFFFFF;
-    text-align:center;
+	display:block;
+	height:auto;
+	margin-left:2em;
+	margin-right:2em;
 }
-nav ul{
-    display:block;
+#navleft{
+	font-size: 100%;
+	letter-spacing: 0.2em;
+	float: left;
+	background: rgb(199,212,216);
+	width:33%;
+	height:10%;
+	box-sizing: border-box;
+	border: 3px solid #fff;
 }
-nav ul li{
-    display:inline;
-    margin:0em 0.188em 0em 0.188em;
+#navmiddle{
+	font-size: 100%;
+	letter-spacing: 0.2em;
+	float: left;
+	background: rgb(199,212,216);
+	width:33%;
+	height:10%;
+	margin-left:0.5%;
+	box-sizing: border-box;
+	border: 3px solid #fff;
 }
-nav ul li a{
-    color: #454040;
-    font-size: 1.125em;
-    line-height: 2.5em;
-    padding:0.563em 0.938em 0.375em 0.983em;
-    transition:background 0.2s;
-    -webkid-transition:background 0.2s;
-}
-nav ul li a:hover{
-    background:#DBD9D8;
-	border-bottom:0.188em solid #FFBF00;
-}
-/*Main*/
-#main{
-    display:block;
-    width:96%;
-    margin: 1.25em auto;
-    padding:0em;
-}
-#main article{
-    display:inline-block;
-    width:100%;
-	height:50em;
-    vertical-align: top; 
-    margin: 0em;
-    padding:0em;
-    text-align:center;
-	background:#fff;
-	border-radius: 10px 10px 10px 10px/ 10px 10px 10px 10px;
-}
-#abstand{
-	height:2.2em;
-	width:100%;
-}
-#abstand h2{
-	text-align:left;
-}
-/*Process Query language*/
-.language{
-	display: block;
-	height:20%;
-	width:100%;
+#navright{
+	font-size: 100%;
+	letter-spacing: 0.2em;
+	text-align: left;
+	float: left;
+	background: rgb(199,212,216);
+	width:33%;
+	height:10%;
+	margin-left:0.5%;
+	box-sizing: border-box;
+	border: 3px solid #fff;
 }
 #request{
-	height:60%;
-	width: 50%;
-    margin: 0 auto; 
-	border: 1px solid black;
-	border-radius: 10px 10px 10px 10px/ 10px 10px 10px 10px;
+	height:30%;
 }
-/*MTime*/
-#MTime{
-	display: block;
-	width:100%;
-	height:5%;
+main{
+	display:block;
+	height:auto;
+	margin-left:2em;
+	margin-right:2em;
 }
-#MTime .txt{
-	font-size: 1em;
-    line-height: 1.8em;
-    font-family: arial, Helvetica, sans-serif;
-    font-weight: 100;
-    color:#2F2D2C;
-    margin:0em;
-    padding:1em;
+#left{
+	float: left;
+	width:66.5%;
+	margin-top:1em;
+	height:82%;
+	background: rgb(199,212,216); /* IE6-9 */
+	box-sizing: border-box;
+	border: 3px solid #fff;
+}
+#right{
+	float: left;
+	width:33%;
+	margin-top:1em;
+	margin-left:0.5%;
+	height:82%;
 }
 /*Eventgraph*/
-
 .link {
   fill: none;
   stroke: #666;
   stroke-width: 1.5px;
 }
-
 #start {
   fill: red;
 }
-
 .link.start {
   stroke: red;
 }
-
 .link.end {
   stroke-dasharray: 0,2 1;
 }
-
 circle {
   fill: #ccc;
   stroke: #333;
   stroke-width: 1.5px;
 }
 text {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
   pointer-events: none;
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
 text.nodelabel {
   	font: 10px sans-serif;
  	pointer-events: none;
 }
+text.path_label{
+	font: 12px sans-serif;
+}
 #chart{
 	display: block;
 	width:100%;
-	height:75%;
+	height:100%;
 }
 svg{
 	width:100%;
 	height:100%;
 }
-/*rechte Seite*/
-#main aside{
-    display:block;
-    width:100%;
-	height:48em;
-    /*margin-left:3%;*/
-    vertical-align:top;
-}
-/*Eventhäufigkeitsdiagramm*/
+/*barchart*/
 #e3{
-	background:#fff;
-	border-color:#fff;
     display:inline-block;
-	height:47%;
+	height:40%;
 	width:100%;
-	border-radius: 10px 10px 10px 10px/ 10px 10px 10px 10px;
 }
 #barchart{
 	display:inline-block;
 	height:100%;
-	width:79%;
+	width:75%;
 }
 #bar{
 	box-sizing: border-box;
@@ -267,6 +142,7 @@ svg{
 }
 .label{
 	font-family: Arial;
+	letter-spacing: 0.2em;
 	font-size: 55%;
 	color:#fff;
 	position: absolute;
@@ -276,34 +152,35 @@ svg{
 }
 .name{
 	font-family: Arial;
+	letter-spacing: 0.2em;
 	font-size: 60%;
-	color:black;
+	color:#fff;
 	position: absolute;
-	right:-100px;
+	right:-148px;
 	top:50%;
 	/*top: 5px;*/
-
 }
 /*Buttons für Matrix+Abdeckung*/
 #mitte{
-	height:5%;
+	display:inline-block;
+	height:4%;
 	width:100%;
+	padding-top: 0.7em;
 }
 /*Container für Matrix+Abdeckung*/
 #unten{
 	display:inline-block;
-	height:47%;
+	height:54.6%;
 	width:100%;
-    background:#fff;
-	border-radius: 10px 10px 10px 10px/ 10px 10px 10px 10px;
 }
 /*Abdeckung*/
 #e2{
     display:relative;
+	background: rgb(199,212,216);
+	box-sizing: border-box;
+	border: 3px solid #fff;
 	height:100%;
 	width:100%;
-    background:#fff;
-	border-radius: 10px 10px 10px 10px/ 10px 10px 10px 10px;
 }
 /*Chord*/
 #tooltip {
@@ -339,15 +216,13 @@ path.chord {
     display:relative;
 	height:100%;
 	width:100%;
-    background:#fff;
-	border-radius: 10px 10px 10px 10px/ 10px 10px 10px 10px;
 }
 #coverage{
 	display: inline-block;
 	box-sizing: border-box;
 	border: 1px solid #fff;
 	position:relative;
-	background-color:#aa7455;
+	background: rgb(12,50,61); /* IE6-9 */
 }
 .covLabel{
 	font-family: Arial;
