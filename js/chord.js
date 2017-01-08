@@ -1,7 +1,7 @@
 
 var svg2;
 function chord(json){
-	
+	d3.select("#e2").select("svg").remove();	// removing excisting svg before redrawing
 	d3.json(json,function(error,data){
 		var mpr =chordMpr(json.Dependency);
 		  mpr
@@ -101,9 +101,9 @@ function drawChords (matrix, mmap) {
                   && p.target.index != i;
             });
           }
-	resizeChord();
+	reposChord();
    }
-function resizeChord(){
+function reposChord(){
   width = document.getElementById('e2').offsetWidth, height = document.getElementById('e2').offsetHeight;
   svg2.attr("transform", "translate(" + ((width / 2)) +"," + ((height / 2)) + ")");	
 

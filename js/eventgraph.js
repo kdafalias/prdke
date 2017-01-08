@@ -8,6 +8,7 @@
 	var zoom;
 
 function graph(data,width,height){
+	d3.select("#chart").select("svg").remove();	// removing excisting svg before redrawing
 		// mittels width und height kann die größe des containers geändert werden
     linkDistance=120;
 		// Links müssen gemapped werden, damit source und target gefunden werden können.
@@ -110,7 +111,7 @@ function graph(data,width,height){
 	function transform(d) {
 	  return "translate(" + d.x + "," + d.y + ")";
 	}
-	resizeEvent();
+	reposEvent();
 }
 // Text
 function text(){
@@ -124,14 +125,11 @@ function text(){
 };
 //Beschriftungen
 function MTime(data){
-	$("#navright .txt1").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
-	$("#navright .txt2").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
-	$("#navright .txt3").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
-	$("#navright .txt4").text( "Durchschnittliche Durchlaufzeit: "+ data.MeanRuntime+" Stunden");
+	$("#navmiddle .txt").text( "Durchschnittliche Durchlaufzeit1: "+ data.MeanRuntime+" Stunden");
 };
 
 //resize Eventgraph
-function resizeEvent(){
+function reposEvent(){
   width = document.getElementById('chart').offsetWidth, height = document.getElementById('chart').offsetHeight;
   svg.attr('width', width).attr('height', height);
   force.size([width, height]).resume();
