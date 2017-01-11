@@ -32,7 +32,15 @@ class cExcelImport extends cGeneric
    */
   private function findCaseTable($aTable, $aID = array(), $iParentCaseID = null)
   {
-    $sIdName = implode(',',$aTable['idname']);
+    try {
+      $sIdName = implode(',',$aTable['idname']);
+      
+    } catch (Exception $exc) {
+      echo $exc->getTraceAsString();
+    } finally {
+      
+    }
+
     $sQueryAct = "SELECT * FROM aktivitaeten WHERE tabelle = '{$aTable['table']}'";
     $aActivities = array();
     $oTableAct = $this->oDB->query($sQueryAct);
@@ -87,6 +95,15 @@ class cExcelImport extends cGeneric
   }
   
   /**
+   * Bereinigt die Daten, ergänzt Werte, wo möglich und löscht Datensätze, die nicht zuordenbar sind
+   */
+  protected function cleanData()
+  {
+    
+  }
+
+
+  /**
    * Iteriert durch die Tabellen und ruft die rekursive Funktion zur Case-Suche auf
    */
   public function findCases()
@@ -98,12 +115,13 @@ class cExcelImport extends cGeneric
     $this->oDB->query('TRUNCATE eventlog');
     
     $aTables = array(      
-          array('table'=>'Bestellung', 'idname'=>array('BestellNr', 'KredNr'), 'fkname'=>array(), 
+          array( 'table'=>'Bestellposition', 'idname'=>array('PosNr', 'BestellNr'),'fkname'=>array(), 
               'children'=>array(
-                  array('table'=>'Kreditor', 'idname'=>array('KredNr'), 'fkname'=>array('KredNr'),'children'=>array()),
-                  array('table'=>'Bestellposition', 'idname'=>array('PosNr', 'BestellNr'),'fkname'=>array('BestellNr'), 'children'=>array()),
-                  array('table'=>'Wareneingang', 'idname'=>array('ID'),'fkname'=>array('BestellNr'), 'children'=>array()),
-                  array('table'=>'Rechnung', 'fkname'=>array('BestellNr'),'idname'=>array('RechNr'),
+                  array('table'=>'Bestellung', 'idname'=>array('BestellNr', 'KredNr'),'fkname'=>array('BestellNr'), 'children'=>array(
+                      array('table'=>'Kreditor', 'idname'=>array('KredNr'), 'fkname'=>array('KredNr'),'children'=>array())
+                  )),
+                  array('table'=>'Wareneingang', 'idname'=>array('ID'),'fkname'=>array('PosNr', 'BestellNr'), 'children'=>array()),
+                  array('table'=>'Rechnung', 'fkname'=>array('PosNr', 'BestellNr'),'idname'=>array('RechNr'),
                       'children'=>array(
                           array('table'=>'Zahlung', 'idname'=>array('ID'), 'fkname'=>array('RechNr'), 'children'=>array())
                       ))              
