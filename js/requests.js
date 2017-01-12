@@ -14,10 +14,9 @@ function sendWebRequest(){
 	var abdeckung=document.getElementById("abdeckung").value;
 
 	// send Request fehlt noch
-	
-	$.getJSON("js/eventdata.json",function(json){
+	$.getJSON("/webservice/webservice.php",function(json){
 		drawGraph(json);
-	});
+	});	
 }
 
 // draw graps and illustrate informations
