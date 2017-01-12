@@ -37,9 +37,7 @@ class cExcelImport extends cGeneric
       
     } catch (Exception $exc) {
       echo $exc->getTraceAsString();
-    } finally {
-      
-    }
+    } 
 
     $sQueryAct = "SELECT * FROM aktivitaeten WHERE tabelle = '{$aTable['table']}'";
     $aActivities = array();
@@ -54,7 +52,7 @@ class cExcelImport extends cGeneric
       $sQuery .= " AND $sIndex = ".$aID[$sIndex];
     }
 
-    echo($sQuery." kweri<br>");
+//    echo($sQuery." kweri<br>");
     $oTable = $this->oDB->query($sQuery);
     while($aRow = $oTable->fetch_assoc())
     {
@@ -67,26 +65,48 @@ class cExcelImport extends cGeneric
       {
         $iCaseID = $iParentCaseID;
       }
-      echo('<pre>');
-      print_r($aRow);
-      echo('</pre>');
-      echo($iCaseID."<br>");
+//      echo('<pre>');
+//      print_r($aRow);
+//      echo('</pre>');
+//      echo($iCaseID."<br>");
       $sWhere = '';
       $sID = '';
+      $iPrimID = null;
       foreach($aTable['idname'] as $iIDName)
       {
         $sWhere .= " AND $iIDName=".$aRow[$iIDName];
         $sID .= $aRow[$iIDName];
+        if(!empty($aTable['histidname']) && $aTable['histidname'] == $iIDName)
+        {
+          $iPrimID = $aRow[$iIDName];
+        }        
       }
+      if(empty($iPrimID)) $iPrimID = $sID;
       $this->oDB->query("UPDATE {$aTable['table']} SET CaseID = $iCaseID WHERE 1=1 $sWhere");
       foreach($aActivities as $aRowAct)
       {
         $sQueryIns = "INSERT INTO eventlog(EventID, Timestamp, Aktivitaeten_ID, CaseID) "
                 . "SELECT CONCAT({$sIdName}) AS ID, {$aRowAct['TSFeld']}, {$aRowAct['ID']}, $iCaseID FROM {$aRowAct['tabelle']} WHERE 1=1 $sWhere;";
         $this->oDB->query($sQueryIns);
-        echo($sQueryIns."<br>");
+//        echo($sQueryIns."<br>");
       }
+      // Änderungshistorie für die jeweilige Tabelle mit berücksichtigen
       $this->oDB->query("UPDATE Aenderungshistorie SET CaseID = $iCaseID WHERE Tabelle = '{$aTable['table']}' AND ID = {$sID}");
+     
+      $sQueryAH = "INSERT INTO eventlog(EventID, Timestamp, Aktivitaeten_ID, CaseID) 
+                    SELECT AenderNr, AenderTS, aktivitaeten.ID, CaseID FROM
+                    aenderungshistorie INNER JOIN aktivitaeten
+                    ON aenderungshistorie.Tabelle = aktivitaeten.wert1
+                    AND aenderungshistorie.Feld = aktivitaeten.wert2
+                    AND 
+                    (IF(spalte3 LIKE 'Wert_neu', LENGTH(Wert_neu) , 1))
+                    AND 
+                    (IF(spalte3 LIKE 'Wert_alt', LENGTH(Wert_alt) , 1))
+                    WHERE aenderungshistorie.Tabelle = '{$aTable['table']}' AND aenderungshistorie.ID = {$iPrimID};";
+      $this->oDB->query($sQueryAH);
+      echo($sQueryAH."<br>");
+      echo($this->oDB->affected_rows." $iPrimID $sID<br>");
+     
       foreach($aTable['children'] as $aChildTable)
       {
         $this->findCaseTable($aChildTable, $aRow, $iCaseID);
@@ -117,7 +137,7 @@ class cExcelImport extends cGeneric
     $aTables = array(      
           array( 'table'=>'Bestellposition', 'idname'=>array('PosNr', 'BestellNr'),'fkname'=>array(), 
               'children'=>array(
-                  array('table'=>'Bestellung', 'idname'=>array('BestellNr', 'KredNr'),'fkname'=>array('BestellNr'), 'children'=>array(
+                  array('table'=>'Bestellung', 'histidname'=>'BestellNr', 'idname'=>array('BestellNr', 'KredNr'),'fkname'=>array('BestellNr'), 'children'=>array(
                       array('table'=>'Kreditor', 'idname'=>array('KredNr'), 'fkname'=>array('KredNr'),'children'=>array())
                   )),
                   array('table'=>'Wareneingang', 'idname'=>array('ID'),'fkname'=>array('PosNr', 'BestellNr'), 'children'=>array()),
