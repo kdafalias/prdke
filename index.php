@@ -4,7 +4,6 @@
         <title>Process-Miner</title>
         <link rel="stylesheet" href="style.css" type="text/css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=none">
-		<script src="js/eventdata.json"></script>
 		<script src="js/eventgraph.js"></script>
 		<script src="js/queue.js"></script>
 		<script src="js/underscore.js"></script>
@@ -72,7 +71,7 @@
 			<!--Eventgraph-->
 			<div id=left>
 				<h2>Eventgraph <input id="max" onClick = "changeSizeEvent();reposEvent();reposChord();" type="image" src="images/maximize_white.png" /><input type="radio" id="time" name="type" onChange="text()" checked="checked" class="radio"><label for="time"> Zeit</label>
-    				<input type="radio" id="anz" name="type" onChange="text()" ><label for="frequency" >  Anzahl</label></h2>
+    				<input type="radio" id="anz" name="type" onChange="text()" ><label for="anz" >  Anzahl</label></h2>
 				<div id="chart">
 					<script type="text/javascript">
 						

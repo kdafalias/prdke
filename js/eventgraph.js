@@ -117,10 +117,10 @@ function graph(data,width,height){
 function text(){
 	// graph ready boolean= true, false wenn alle elemente fertig geladen
 	if(document.getElementById("time").checked){
-		edgelabels.text(function(d) { return d.num; })
+		edgelabels.text(function(d) { return d.time; })
 	}else{
 		// Beschriftung der Kanten auf Anzahl setzen
-		edgelabels.text(function(d) { return d.time; })
+		edgelabels.text(function(d) { return d.num; })
 	}		
 };
 //Beschriftungen
