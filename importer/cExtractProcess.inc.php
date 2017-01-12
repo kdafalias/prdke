@@ -13,5 +13,6 @@ class cExtractProcess extends cGeneric
   public function main()
   {
     $sQuery = "CALL extract_events";
+    $this->oDB->query($sQuery);
   }
 }
