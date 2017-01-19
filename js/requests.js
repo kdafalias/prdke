@@ -14,7 +14,7 @@ function sendWebRequest(){
 	var abdeckung=document.getElementById("abdeckung").value;
 
 	// send Request fehlt noch
-	$.getJSON("/webservice/webservice.php",function(json){
+	$.getJSON("webservice/webservice.php",function(json){
 		drawGraph(json);
 	});	
 }

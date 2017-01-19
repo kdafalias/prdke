@@ -394,7 +394,6 @@ footer ul li .logo{
 		margin-top:5px;
 	}
 @media screen and (max-height:921px){
-    #request{display:none;}
 	#ausw{width:100%;}
 	#buttns{display:block;width:100%;}
 }
