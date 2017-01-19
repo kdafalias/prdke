@@ -1,5 +1,7 @@
 
 var processquery;
+var allCoverage = true;
+var variations = new Array();
 
 /* retrieve Data from process query entry and then send request to webservice
 Method is called after pushing apply button*/
@@ -10,13 +12,14 @@ function getData(){
 
 // send request to webservice and retrieve data
 function sendWebRequest(){
-	var caseID=document.getElementById("caseID").value;
-	var abdeckung=document.getElementById("abdeckung").value;
-
+  var oData = {};
+	oData['cases']=document.getElementById("cases").value;
+	oData['aktivitaeten']=document.getElementById("aktivitaeten").value;
+ oData['varianten']=variations;
 	// send Request fehlt noch
-	$.getJSON("webservice/webservice.php",function(json){
-		drawGraph(json);
-	});	
+	$.getJSON("/webservice/webservice.php",oData,function(json){
+  		drawGraph(json);
+	});
 }
 
 // draw graps and illustrate informations

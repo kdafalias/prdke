@@ -1,5 +1,5 @@
 /*
-SQLyog Community v12.3.2 (64 bit)
+SQLyog Community v12.3.3 (64 bit)
 MySQL - 10.1.14-MariaDB : Database - prdke
 *********************************************************************
 */
@@ -113,7 +113,7 @@ CREATE TABLE `eventlog` (
   KEY `fk_Eventlog_Case1_idx` (`CaseID`),
   CONSTRAINT `fk_Eventlog_Aktivitaeten1` FOREIGN KEY (`Aktivitaeten_ID`) REFERENCES `aktivitaeten` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Eventlog_Case1` FOREIGN KEY (`CaseID`) REFERENCES `cases` (`CaseID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=960 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1052 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `kreditor` */
 
@@ -142,7 +142,7 @@ CREATE TABLE `prozessteilschritte` (
   `ProzessteilschrittID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Durchlaufzeit` float DEFAULT NULL,
   `Haeufigkeit` int(11) DEFAULT NULL,
-  `Knotentyp` set('Start','Standard','End') DEFAULT NULL,
+  `Knotentyp` set('start','normal','end') DEFAULT NULL,
   `Aktivitaeten_ID` int(11) NOT NULL,
   `Aktivitaeten_VG_ID` int(11) DEFAULT NULL,
   `NachfolgerID` int(11) DEFAULT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE `prozessteilschritte` (
   KEY `fk_Prozessteilschritte_Aktivitaeten1_idx` (`Aktivitaeten_VG_ID`),
   CONSTRAINT `fk_Prozessteilschritte_Aktivitaeten` FOREIGN KEY (`Aktivitaeten_ID`) REFERENCES `aktivitaeten` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Prozessteilschritte_Prozessvarianten1` FOREIGN KEY (`ProzessvariantenID`) REFERENCES `prozessvarianten` (`ProzessvariantenID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=448 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8577 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `prozessvarianten` */
 
@@ -162,9 +162,11 @@ CREATE TABLE `prozessvarianten` (
   `Haeufigkeit` int(10) unsigned DEFAULT NULL,
   `Durchlaufzeit` float DEFAULT NULL,
   `CompareValue` text,
+  `numActivities` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`ProzessvariantenID`),
-  KEY `compareValue` (`CompareValue`(255))
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
+  KEY `compareValue` (`CompareValue`(255)),
+  KEY `numActivities` (`numActivities`)
+) ENGINE=InnoDB AUTO_INCREMENT=802 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `rechnung` */
 
@@ -196,7 +198,7 @@ CREATE TABLE `teilschritt_tmp` (
   `aktiv_vg` int(11) DEFAULT NULL,
   `CaseID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MEMORY AUTO_INCREMENT=1375 DEFAULT CHARSET=utf8;
+) ENGINE=MEMORY DEFAULT CHARSET=utf8;
 
 /*Table structure for table `usr` */
 
@@ -249,23 +251,6 @@ CREATE TABLE `zahlung` (
   CONSTRAINT `fk_Zahlung_Rechnung1` FOREIGN KEY (`RechNr`) REFERENCES `rechnung` (`RechNr`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Zahlung_USR1` FOREIGN KEY (`ZahlUSR`) REFERENCES `usr` (`USR`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Table structure for table `eventlogview` */
-
-DROP TABLE IF EXISTS `eventlogview`;
-
-/*!50001 CREATE TABLE  `eventlogview`(
- `EventlogID` int(11) ,
- `EventID` int(11) ,
- `Timestamp` datetime ,
- `Aktivitaet` varchar(45) ,
- `CaseID` int(10) unsigned 
-)*/;
-
-/*View structure for view eventlogview */
-
-/*!50001 DROP TABLE IF EXISTS `eventlogview` */;
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `eventlogview` AS (select `eventlog`.`EventlogID` AS `EventlogID`,`eventlog`.`EventID` AS `EventID`,`eventlog`.`Timestamp` AS `Timestamp`,`aktivitaeten`.`Aktivitaet` AS `Aktivitaet`,`eventlog`.`CaseID` AS `CaseID` from (`eventlog` join `aktivitaeten` on((`eventlog`.`Aktivitaeten_ID` = `aktivitaeten`.`ID`))) order by `eventlog`.`CaseID`,`eventlog`.`Timestamp`) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

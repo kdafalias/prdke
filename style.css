@@ -321,13 +321,19 @@ path.chord {
 	height:100%;
 	width:100%;
 }
-#coverage{
+.coverage{
 	display: inline-block;
 	box-sizing: border-box;
 	border: 1px solid #fff;
 	position:relative;
 	background: rgb(12,50,61); /* IE6-9 */
+        cursor: pointer;
 }
+
+.covInactive {
+    background: #d9d9d9 !important;
+}
+
 .covLabel{
 	font-size: 70%;
 	color:#fff;
@@ -394,6 +400,7 @@ footer ul li .logo{
 		margin-top:5px;
 	}
 @media screen and (max-height:921px){
+    #request{display:none;}
 	#ausw{width:100%;}
 	#buttns{display:block;width:100%;}
 }
