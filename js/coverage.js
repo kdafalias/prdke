@@ -16,7 +16,10 @@ function coverage(json){
 		var bar = d3.select("#e4").selectAll("div")
 		.data(data)
 		.enter().append("div")
-		.attr("id","coverage")
+		.attr("class","coverage")
+  .attr("data-id", function(d){
+    return d.VariationID;
+  })  
 		.style("width",function(d){
 			return Number((100/count))+"%";
 		})
@@ -24,11 +27,6 @@ function coverage(json){
 			return Number((d.num/maxVal)*100)+"%";
 		});
 		
-		bar.append("span")
-		.attr("class","covLabel")
-		.text(function(d){
-			return d.VariationID;
-		});
 
 	});
 };

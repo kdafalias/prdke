@@ -24,11 +24,11 @@
 			<!--Case und Abdeckung-->
 			<div id=navleft>
 				<div id=navleftleft>
-					<label for="caseID">Case:</label><br>
-    				<input id="caseID" type = "text" ><br>
+					<label for="cases">Anzahl Cases:</label><br>
+    				<input id="cases" type = "text" ><br>
 
-    				<label for="abdeckung" class="abstand">Abdeckung:</label><br>
-    				<input id="abdeckung" type = "text" value ="1"><br>
+    				<label for="aktivitaeten" class="abstand">Anzahl Aktivitäten:</label><br>
+    				<input id="aktivitaeten" type = "text" ><br>
 				</div>
 				<div id=navleftright>
     			<input type = "button" id="centered" value="Apply" onclick="getData()" class="button"/>
@@ -105,9 +105,33 @@
 		</main>
 		<script>window.jquery || document.write('<script src="js/jquery-3.1.0.js"><\/script>');</script>
 		<script type="text/javascript">
+            
             $(document).ready(function(){
                 $('.menubutton').click(function(){
                     $('nav').slideToggle('slow');
+                });
+                $('div#e4').on('click', 'div', function(event){
+                  event.stopPropagation();
+                  if(allCoverage) $('div.coverage').addClass("covInactive");
+                  allCoverage = false;
+                  if($(this).hasClass("covInactive"))
+                  {
+                    $(this).removeClass("covInactive");
+                    variations.push($(this).attr('data-id'));
+                  }
+                  else
+                  {
+                    $(this).addClass("covInactive");
+                    variations.splice(variations.indexOf($(this).attr('data-id')),1);
+                  }
+                  console.log(variations);
+                  sendWebRequest();
+                });
+                $('body').on('click','div#e4',function(event) {
+                  allCoverage = true;
+                  $('div.coverage').removeClass("covInactive");
+                  variations = new Array();
+                  sendWebRequest();
                 });
           	});
         </script>
@@ -141,7 +165,6 @@
 		<script src="js/query.js"></script>
 		<script src="js/change.js"></script>
 		<script src="js/resize.js"></script>
-		<script src="js/requests.js"></script>
 	</body>
 	<footer>
 	</footer>
