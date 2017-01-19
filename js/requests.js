@@ -26,7 +26,7 @@ function sendWebRequest(){
 function drawGraph(json){
 	graph(json,1200,600);
 	MTime(json);
-	text();
+	text();file:///C:/Users/Wolfgang/Documents/UNI/Praktikum%20DKE/Frontend_neu/index.html
 	bchart(json);
 	chord(json);
 	coverage(json);

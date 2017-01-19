@@ -149,13 +149,21 @@
 		<!--js für Aufspannen der Graphen-->
 		<script>
 			changeSizeEvent = function() {
+				/*Alles wird auf einer Seite dargestellt*/
 				if(document.getElementById('left').style.width == "100%"){
 					document.getElementById('left').style.width = "66.5%"
 					document.getElementById('right').style.width = "33%"
-					document.getElementById('e4').style.height = "height:100%;"
+					document.getElementById('right').style.marginLeft="0.5%"
+					document.getElementById('e3').style.height = "40%"
+					document.getElementById('unten').style.height = "54.6%"
 				}else{
+				/*Eventgraph wird auf 100% Breite aufgespannt, alles andere rutscht nach unten*/
 					document.getElementById('left').style.width = "100%"
 					document.getElementById('right').style.width = "100%"
+					document.getElementById('right').style.marginLeft="0%"
+					document.getElementById('e3').style.height = "60%"
+					document.getElementById('unten').style.height = "110%"
+					document.getElementById('unten').style.paddingBottom="1%"
 				}
 			};
 		</script>
