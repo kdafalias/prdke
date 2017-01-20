@@ -24,7 +24,6 @@ function sendWebRequest(){
 
 // draw graps and illustrate informations
 function drawGraph(json){
-	alert("hi");
 	graph(json,1200,600);
 	MTime(json);
 	text();///file:/C:/Users/Wolfgang/Documents/UNI/Praktikum%20DKE/Frontend_neu/index.html

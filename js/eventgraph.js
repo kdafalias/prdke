@@ -157,7 +157,6 @@ function MTime(data){
 
 //resize Eventgraph
 function reposEvent(){
-	console.log("hi");
   width = document.getElementById('chart').offsetWidth, height = document.getElementById('chart').offsetHeight;
   svg.attr('width', width).attr('height', height);
   force.size([width, height]).resume()
