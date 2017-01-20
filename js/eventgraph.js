@@ -33,13 +33,13 @@ function graph(data,width,height){
 			type:e.type
     	});
 	});
-
+	console.log(width);
 	force = d3.layout.force()
 		.nodes(data.nodes)
 		.links(links)
 		.size([width, height])
 		.linkDistance(linkDistance)
-		.charge(-height)
+		.charge(-width)
 		.on("tick", tick)
 		.start();
 	var colors = d3.scale.category10();
@@ -102,10 +102,37 @@ function graph(data,width,height){
 	  	text.attr("transform", transform);
 		}
 	function linkArc(d) {
-	  var dx = d.target.x - d.source.x,
-		  dy = d.target.y - d.source.y,
-		  dr = Math.sqrt(dx * dx + dy * dy);
-	  return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+	   var x1 = d.source.x,
+          y1 = d.source.y,
+          x2 = d.target.x,
+          y2 = d.target.y,
+          dx = x2 - x1,
+          dy = y2 - y1,
+          dr = Math.sqrt(dx * dx + dy * dy),
+
+          // Default für normale Kanten
+          drx = dr,
+          dry = dr,
+          xRotation = 0, // winkelgrad
+          largeArc = 0, // 1 oder 0
+          sweep = 1; // 1 oder 0
+
+          // Kanten für Knoten mit selben ein und ausgangsknoten
+          if ( x1 === x2 && y1 === y2 ) {
+            xRotation = -45;
+			largeArc = 1;
+            sweep = 0;
+
+            // elliptische Verbindung zwischen beiden Knoten= kein Kreis
+            drx = 30;
+            dry = 20;
+            
+            // der Start und Endpunkt muss minimal auseinanderklaffen, ansonsten wird keine Verbindung angezeigt
+            x2 = x2 + 1;
+            y2 = y2 + 1;
+          } 
+
+     return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
 	}
 
 	function transform(d) {
@@ -130,8 +157,10 @@ function MTime(data){
 
 //resize Eventgraph
 function reposEvent(){
+	console.log("hi");
   width = document.getElementById('chart').offsetWidth, height = document.getElementById('chart').offsetHeight;
   svg.attr('width', width).attr('height', height);
-  force.size([width, height]).resume();
+  force.size([width, height]).resume()
+		.charge(-width);
 };
 

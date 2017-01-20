@@ -15,8 +15,8 @@ function sendWebRequest(){
   var oData = {};
 	oData['cases']=document.getElementById("cases").value;
 	oData['aktivitaeten']=document.getElementById("aktivitaeten").value;
- oData['varianten']=variations;
-	// send Request fehlt noch
+ 	oData['varianten']=variations;
+	// send Request fehlt noch "oData," muss wieder nach "json
 	$.getJSON("/webservice/webservice.php",oData,function(json){
   		drawGraph(json);
 	});
@@ -24,9 +24,10 @@ function sendWebRequest(){
 
 // draw graps and illustrate informations
 function drawGraph(json){
+	alert("hi");
 	graph(json,1200,600);
 	MTime(json);
-	text();file:///C:/Users/Wolfgang/Documents/UNI/Praktikum%20DKE/Frontend_neu/index.html
+	text();///file:/C:/Users/Wolfgang/Documents/UNI/Praktikum%20DKE/Frontend_neu/index.html
 	bchart(json);
 	chord(json);
 	coverage(json);

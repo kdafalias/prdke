@@ -141,8 +141,8 @@
 			window.onresize = function() {
 				reposChord();	
 				reposEvent();
-				document.getElementById("1a").innerHTML=window.innerWidth;
-				document.getElementById("2a").innerHTML=window.innerHeight;
+				//document.getElementById("1a").innerHTML=window.innerWidth;
+				//document.getElementById("2a").innerHTML=window.innerHeight;
 			};
 
 		</script>

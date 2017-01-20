@@ -10,6 +10,7 @@
 		{"name": "Bestellung erstellt","value":10}
 	],
 	"edges":[
+		{"source": "Ware eingegangen", "target": "Ware eingegangen","time":10,"num":3,"type":"normal"},
 		{"source": "Ware eingegangen", "target": "Bestellung storniert","time":10,"num":3,"type":"normal"},
 		{"source": "Bestellung storniert", "target": "Ware eingegangen","time":10,"num":3,"type":"normal"},
 		{"source": "Ware eingegangen", "target": "Rechnung eingegangen","time":20,"num":5,"type":"normal"},

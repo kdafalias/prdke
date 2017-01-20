@@ -20,7 +20,7 @@ function chord(json){
  //  DRAW THE CHORD DIAGRAM
   //*******************************************************************
 function drawChords (matrix, mmap) {
-        var w = 500, h = 350, r1 = h / 2, r0 = r1 - 100;
+       var  w = 500, h = 350, r1 = h / 2, r0 = r1 - 100;
         var fill = d3.scale.ordinal()
             .domain(d3.range(16))	.range(['#c7b570','#c6cdc7','#335c64','#768935','#507282','#5c4a56','#aa7455','#574109','#837722','#73342d','#0a5564','#9c8f57','#7895a4','#4a5456','#b0a690','#0a3542',]);
         var chord = d3.layout.chord()
@@ -30,26 +30,32 @@ function drawChords (matrix, mmap) {
         var arc = d3.svg.arc()
             .innerRadius(r0)
             .outerRadius(r0 + 20);
+	
         svg2 = d3.select("#e2").append("svg:svg")
             .attr("width", w)
             .attr("height", h)
           .append("svg:g")
             .attr("id", "circle")
-            .attr("transform", "translate(" + ((w / 2)) +"," + ((h / 2)) + ")");	//chrod diagramm versetzen
+            .attr("transform", "translate(" + ((w / 2)) +"," + ((h / 2)) + ")");	//chord diagramm versetzen
             svg2.append("circle")
                 .attr("r", r0 + 20);
+	
         var rdr = chordRdr(matrix, mmap);
+	
         chord.matrix(matrix);
+	
         var g = svg2.selectAll("g.group")
             .data(chord.groups())
-          .enter().append("svg:g")
+          	.enter().append("svg:g")
             .attr("class", "group")
             .on("mouseover", mouseover)
             .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+	
         g.append("svg:path")
             .style("stroke", "black")
             .style("fill", function(d) { return fill(d.index); })
             .attr("d", arc);
+	
         g.append("svg:text")
             .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
             .attr("dy", ".35em")
@@ -62,6 +68,7 @@ function drawChords (matrix, mmap) {
                   + (d.angle > Math.PI ? "rotate(180)" : "");
             })
             .text(function(d) { return rdr(d).gname; });
+	
           var chordPaths = svg2.selectAll("path.chord")
                 .data(chord.chords())
               .enter().append("svg:path")
@@ -77,6 +84,7 @@ function drawChords (matrix, mmap) {
                     .style("left", function () { return (d3.event.pageX - 100)+"px";})
                 })
                 .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+	
           function chordTip (d) {
             var p = d3.format(".2%"), q = d3.format(",.3r")
             return ""
@@ -104,8 +112,17 @@ function drawChords (matrix, mmap) {
 	reposChord();
    }
 function reposChord(){
-  width = document.getElementById('e2').offsetWidth, height = document.getElementById('e2').offsetHeight;
-  svg2.attr("transform", "translate(" + ((width / 2)) +"," + ((height / 2)) + ")");	
+  	width = document.getElementById('e2').offsetWidth, height = document.getElementById('e2').offsetHeight;
+	r1 = height / 4, r0 = r1 - 30;
+  	svg2.attr("transform", "translate(" + ((width / 2)) +"," + ((height / 2)) + ")");
+	svg2.selectAll("g.group").selectAll("path").attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1));
+	svg2.selectAll("circle").attr("r", r0 + 30);
+	svg2.selectAll("path.chord").attr("d", d3.svg.chord().radius(r0));
+	svg2.selectAll("g.group").selectAll("text").attr("transform", function(d) {
+              return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+                  + "translate(" + (r0 + 35) + ")"
+                  + (d.angle > Math.PI ? "rotate(180)" : "");
+            })
 
 };
 //*******************************************************************
