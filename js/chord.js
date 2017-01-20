@@ -112,6 +112,7 @@ function drawChords (matrix, mmap) {
 	reposChord();
    }
 function reposChord(){
+	alert("zwei");
   	width = document.getElementById('e2').offsetWidth, height = document.getElementById('e2').offsetHeight;
 	r1 = height / 4, r0 = r1 - 30;
   	svg2.attr("transform", "translate(" + ((width / 2)) +"," + ((height / 2)) + ")");
