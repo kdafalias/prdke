@@ -17,9 +17,9 @@ function coverage(json){
 		.data(data)
 		.enter().append("div")
 		.attr("class","coverage")
-  .attr("data-id", function(d){
-    return d.VariationID;
-  })  
+  		.attr("data-id", function(d){
+    		return d.VariationID;
+		})  
 		.style("width",function(d){
 			return Number((100/count))+"%";
 		})

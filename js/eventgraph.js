@@ -10,7 +10,8 @@
 function graph(data,width,height){
 	d3.select("#chart").select("svg").remove();	// removing excisting svg before redrawing
 		// mittels width und height kann die größe des containers geändert werden
-    linkDistance=120;
+	console.log(width);
+    linkDistance=(width/10);
 		// Links müssen gemapped werden, damit source und target gefunden werden können.
 	var links = [];
 	data.edges.forEach(function(e) {
@@ -159,7 +160,15 @@ function MTime(data){
 function reposEvent(){
   width = document.getElementById('chart').offsetWidth, height = document.getElementById('chart').offsetHeight;
   svg.attr('width', width).attr('height', height);
-  force.size([width, height]).resume()
-		.charge(-width);
+	
+	// stop layout for changes
+	force.stop();
+  	force.size([width, height])
+		.charge(-(width-10));
+	linkDistance=width/9;
+
+	force.linkDistance(linkDistance);
+	
+	force.start();
 };
 

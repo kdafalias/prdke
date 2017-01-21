@@ -28,6 +28,7 @@ h2{
 	text-align:center;
 	color:rgb(160,223,241);
 	margin-top:0;
+	margin-bottom: 0;
 }
 input{
 	border-radius: 15px;
@@ -213,7 +214,7 @@ text.path_label{
 #chart{
 	display: block;
 	width:100%;
-	height:100%;
+	height:97%;
 }
 svg{
 	width:100%;

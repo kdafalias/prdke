@@ -173,7 +173,6 @@
 		<!--<script src="js/abdeckungsdiagramm.js"></script>-->
 		<script src="js/query.js"></script>
 		<script src="js/change.js"></script>
-		<script src="js/resize.js"></script>
 	</body>
 	<footer>
 	</footer>
