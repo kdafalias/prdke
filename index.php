@@ -113,11 +113,10 @@
                 });
                 $('div#e4').on('click',"rect",function(event){
 					
-                  event.stopPropagation();
+             	event.stopPropagation();
                   if(allCoverage) $('rect.coverage').addClass("covInactive");
                   		allCoverage = false;
-                  if($(this).hasClass("covInactive"))
-                  {
+                  if($(this).hasClass("covInactive")){
                     $(this).removeClass("covInactive");
                     variations.push($(this).attr('data-id'));
                   }
@@ -129,7 +128,7 @@
                   console.log(variations);
                   sendWebRequest();
                 });
-                $('body').on('click','div#e4',function(event) {
+               $('div#e4').on('click','g.y.axis',function(event) {
                   allCoverage = true;
                   $('rect.coverage').removeClass("covInactive");
                   variations = new Array();
@@ -142,7 +141,7 @@
 			window.onresize = function() {
 				reposChord();	
 				reposEvent();
-				//redraw()
+				redraw();
 				//document.getElementById("1a").innerHTML=window.innerWidth;
 				//document.getElementById("2a").innerHTML=window.innerHeight;
 			};
