@@ -14,6 +14,7 @@
 		<script src="js/requests.js"></script>
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
 		<script src="lib/d3.js"></script>
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     </head>
@@ -106,17 +107,16 @@
 		</main>
 		<script>window.jquery || document.write('<script src="js/jquery-3.1.0.js"><\/script>');</script>
 		<script type="text/javascript">
-            
-            $(document).ready(function(){
+                $(document).ready(function(){
                 $('.menubutton').click(function(){
                     $('nav').slideToggle('slow');
                 });
-                $('div#e4').on('click', 'div', function(event){
-                  event.stopPropagation();
-                  if(allCoverage) $('div.coverage').addClass("covInactive");
-                  allCoverage = false;
-                  if($(this).hasClass("covInactive"))
-                  {
+                $('div#e4').on('click',"rect",function(event){
+					
+             	event.stopPropagation();
+                  if(allCoverage) $('rect.coverage').addClass("covInactive");
+                  		allCoverage = false;
+                  if($(this).hasClass("covInactive")){
                     $(this).removeClass("covInactive");
                     variations.push($(this).attr('data-id'));
                   }
@@ -128,9 +128,9 @@
                   console.log(variations);
                   sendWebRequest();
                 });
-                $('body').on('click','div#e4',function(event) {
+               $('div#e4').on('click','g.y.axis',function(event) {
                   allCoverage = true;
-                  $('div.coverage').removeClass("covInactive");
+                  $('rect.coverage').removeClass("covInactive");
                   variations = new Array();
                   sendWebRequest();
                 });
@@ -141,6 +141,7 @@
 			window.onresize = function() {
 				reposChord();	
 				reposEvent();
+				redraw();
 				//document.getElementById("1a").innerHTML=window.innerWidth;
 				//document.getElementById("2a").innerHTML=window.innerHeight;
 			};
@@ -156,6 +157,7 @@
 					document.getElementById('right').style.marginLeft="0.5%"
 					document.getElementById('e3').style.height = "40%"
 					document.getElementById('unten').style.height = "54.6%"
+					redraw()
 				}else{
 				/*Eventgraph wird auf 100% Breite aufgespannt, alles andere rutscht nach unten*/
 					document.getElementById('left').style.width = "100%"
@@ -164,6 +166,7 @@
 					document.getElementById('e3').style.height = "60%"
 					document.getElementById('unten').style.height = "110%"
 					document.getElementById('unten').style.paddingBottom="1%"
+					redraw()
 				}
 			};
 		</script>

@@ -11,10 +11,14 @@
     matrixBtn.onclick = function() {
         abdeckungDiv.setAttribute('class', 'hidden');
         matrixDiv.setAttribute('class', 'visible');
+		reposChord();
+		redraw()
     };
 
     abdeckungBtn.onclick = function() {
         matrixDiv.setAttribute('class', 'hidden');
         abdeckungDiv.setAttribute('class', 'visible');
+		reposChord();
+		redraw()
     };
 })();

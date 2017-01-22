@@ -7,3 +7,4 @@ lib/PHPExcel/install.txt
 lib/PHPExcel/license.txt
 *.zip
 nbproject/
+importer/files/import.csv

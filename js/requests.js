@@ -16,6 +16,7 @@ function sendWebRequest(){
 	oData['cases']=document.getElementById("cases").value;
 	oData['aktivitaeten']=document.getElementById("aktivitaeten").value;
  	oData['varianten']=variations;
+  oData['query']=request;
 	// send Request fehlt noch "oData," muss wieder nach "json
 	$.getJSON("/webservice/webservice.php",oData,function(json){
   		drawGraph(json);

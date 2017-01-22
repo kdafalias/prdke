@@ -13,6 +13,7 @@ class cPMBackend extends cGeneric
   private $numActivities = null;
   private $numCases = null;
   private $aVarianten = array();
+  private $aQuery = array();
   
   private function get_nodes()
   {
@@ -143,13 +144,14 @@ class cPMBackend extends cGeneric
   }
   
   /**
-   * 
+   * Hauptmethode, 
    */
   public function getEventData()
   {
     $this->numActivities = !empty($_REQUEST['aktivitaeten']) ? intval($_REQUEST['aktivitaeten']) : null;
     $this->numCases = !empty($_REQUEST['cases']) ? intval($_REQUEST['cases']) : null;
     $this->aVarianten = !empty($_REQUEST['varianten']) ? $_REQUEST['varianten'] : array();
+    $this->aQuery = !empty($_REQUEST['query']) ? $_REQUEST['query'] : array();
     $aNodes = $this->get_nodes();
     $aReturn = array('nodes'=>$aNodes,
         'edges'=>$this->get_edges(),

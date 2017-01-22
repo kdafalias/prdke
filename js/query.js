@@ -3,10 +3,10 @@ var request=[];
 var jsonStr="";
 function next(){
 	var curSelect = new Object();
-	curSelect.yesNo = document.getElementById("yesNo").options[document.getElementById("yesNo").selectedIndex].value;
+    curSelect.yesNo = document.getElementById("yesNo").options[document.getElementById("yesNo").selectedIndex].value;
    	curSelect.query  = document.getElementById("query").options[document.getElementById("query").selectedIndex].text;
    	curSelect.Übergang = document.getElementById("Übergang").options[document.getElementById("Übergang").selectedIndex].value;
-
+    curSelect.id = $( "#query" ).val();
 	request.push(curSelect);
 	print();
 }

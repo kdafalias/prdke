@@ -10,7 +10,6 @@
 function graph(data,width,height){
 	d3.select("#chart").select("svg").remove();	// removing excisting svg before redrawing
 		// mittels width und height kann die größe des containers geändert werden
-	console.log(width);
     linkDistance=(width/10);
 		// Links müssen gemapped werden, damit source und target gefunden werden können.
 	var links = [];
@@ -34,7 +33,6 @@ function graph(data,width,height){
 			type:e.type
     	});
 	});
-	console.log(width);
 	force = d3.layout.force()
 		.nodes(data.nodes)
 		.links(links)
