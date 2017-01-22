@@ -1,3 +1,4 @@
+
 body {
 	font-family: 'montserrat';
 	background: rgb(39,95,111); /* IE6-9 */
@@ -321,6 +322,7 @@ path.chord {
     display:relative;
 	height:100%;
 	width:100%;
+	  padding : 10px;
 }
 .coverage{
 	display: inline-block;
@@ -381,6 +383,26 @@ footer ul li .logo{
 	display:inline-block;
 	margin:auto;
 }
+#e4 rect{
+  fill: #4aaeea;
+}
+
+#e4 text{
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end; 
+}
+
+.axis text{
+  font: 10px sans-serif;
+}
+
+.axis path, .axis line{
+  fill: none;
+  stroke : #fff;
+  shape-rendering: crispEdges;
+}
+
 /*Mobile Style*/
 @media screen and (max-width:1900px){
     #request{height:44%;width:100%;}
