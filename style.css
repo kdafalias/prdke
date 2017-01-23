@@ -13,7 +13,7 @@ body {
 	src:url(http://fonts.gstatic.com/s/montserrat/v7/IQHow_FEYlDC4Gzy_m8fcoWiMMZ7xLd792ULpGE4W_Y.woff2);
 }
 h1{
-	/*display:inline-block;	/*to display window size*/
+	display:inline-block;	/*to display window size*/
 	text-align:center;
 	letter-spacing: 0.2em;
 	color:rgb(160,223,241);
@@ -243,7 +243,7 @@ svg{
 	font-size: 60%;
 	color:#fff;
 	position: absolute;
-	right:10px;	
+	right:6px;	
 	top:50%;
 	/*top: 5px;*/
 }
@@ -253,8 +253,9 @@ svg{
 	color:#fff;
 	color: rgb(160,223,241);
 	position: absolute;
-	right:-148px;
-	top:50%;
+	left:100%;
+	top:30%;
+	padding-left: 5px;
 	/*top: 5px;*/
 }
 /*Buttons für Matrix+Abdeckung*/
@@ -409,6 +410,19 @@ footer ul li .logo{
 	#ausw{width:100%;}
 	#buttns{display:block;width:100%;}
 }
+@media screen and (max-width:1900px){
+	.label{
+		right:2px;
+	}
+}
+@media screen and (max-width:1360px){
+	#navleftright{width:20%;}
+	#navleftleft{width:80%;}
+	input#centered.button{
+		margin-right:40px;
+		margin-top:18%;
+	}
+}
 @media screen and (max-width:1312px){
  	#navleft{
 		width:49.5%;
@@ -422,6 +436,24 @@ footer ul li .logo{
 		margin-left:0px;
 		margin-top:5px;
 	}
+	#navleftright{width:50%;}
+	#navleftleft{width:50%;}
+	input#centered.button{
+		float:left;
+		text-align: center;
+		vertical-align: middle;
+		margin-right:0%;
+		margin-top:35px;
+	}
+}
+@media screen and (max-width:926px){
+   	#navleft{
+		height:15%;
+	}
+	#navmiddle{
+		height:15%;
+	}
+}
 @media screen and (max-height:921px){
     #request{	float: left;}
 	#ausw{width:100%;}
