@@ -1,7 +1,12 @@
 function bchart(json){
 	var chart = d3.select("#barchart");
 	d3.json(json, function(d){
-		data=json.nodes;
+		long=json.nodes;	// long= array mit start und endknoten
+		var index;
+		// methode ohne start und endknoten für barchart
+		data=long.filter(function(i) {
+			return i.name != "Start"&& i.name!="End"
+		});
 		// konvertieren zu nummer
 		data.forEach(function(d){
 			d.value=+d.value;

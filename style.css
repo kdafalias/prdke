@@ -13,7 +13,7 @@ body {
 	src:url(http://fonts.gstatic.com/s/montserrat/v7/IQHow_FEYlDC4Gzy_m8fcoWiMMZ7xLd792ULpGE4W_Y.woff2);
 }
 h1{
-	display:inline-block;	/*to display window size*/
+	/*display:inline-block;	/*to display window size*/
 	text-align:center;
 	letter-spacing: 0.2em;
 	color:rgb(160,223,241);

@@ -19,6 +19,7 @@ function sendWebRequest(){
   oData['query']=request;
 	// send Request fehlt noch "oData," muss wieder nach "json
 	$.getJSON("/webservice/webservice.php",oData,function(json){
+		
   		drawGraph(json);
 	});
 }
