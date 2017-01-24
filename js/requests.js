@@ -2,6 +2,7 @@
 var processquery;
 var allCoverage = true;
 var variations = new Array();
+var d;	// nicht alle varianten ausgewählt
 
 /* retrieve Data from process query entry and then send request to webservice
 Method is called after pushing apply button*/
@@ -26,9 +27,11 @@ function sendWebRequest(){
 
 function highlightActivities(json)
 {
-  if(allCoverage) $('div#e4 rect').removeClass("covInactive");
-//  else 
-    $('div#e4 rect').addClass("covInactive");
+	// alle Varianten werden initial angezeigt
+	$.each(json.Variation,function(index, o){
+		o["vis"]=true;	// Kennzeichen für anzeigen der balken
+	});
+
 }
 
 // draw graps and illustrate informations
@@ -38,6 +41,13 @@ function drawGraph(json){
 	text();///file:/C:/Users/Wolfgang/Documents/UNI/Praktikum%20DKE/Frontend_neu/index.html
 	bchart(json);
 	chord(json);
-	coverage(json);
-  highlightActivities(json);
+	highlightActivities(json);	// vor coverage aufruf alle mit vis:true kennzeichnen
+	if(allCoverage){
+		coverage(json);
+	}else{
+		coverage(d);
+	}
+}
+function getDat(){
+	return d;
 }

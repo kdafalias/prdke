@@ -1,9 +1,10 @@
-
 var d;
 function coverage(json){
 	d=json;
+	
 	d3.select("#e4").select("svg").remove();
 	var margin ={top:20, right:30, bottom:30, left:22},
+		
     width=document.getElementById("unten").offsetWidth-margin.left - margin.right, 
     height=document.getElementById("unten").offsetHeight-margin.top-margin.bottom;
 
@@ -40,9 +41,9 @@ d3.json(json, function(error, data){
   var sClass = 'coverage';
   variations.every(function(value, index, array)
   {
-      console.log(value);
-      console.log(data);
-    if(value == data['VariationID']) alert("gefunden"+value);
+    //  console.log(value);
+     // console.log(data);
+    //if(value == data['VariationID']) alert("gefunden"+value);
   });
 
 	// balken
@@ -57,6 +58,11 @@ d3.json(json, function(error, data){
         return height - y(d.num); 
       })
   		.attr("class",sClass)
+  		.attr("class",function(d){
+	  		if(d.vis==false){
+				return "covInactive";
+			}
+  		})
   		.attr("data-id", function(d){
     		return d.VariationID;
 		})  
@@ -83,12 +89,17 @@ d3.json(json, function(error, data){
         .style("text-anchor", "end")
         .text("Anzahl");
 });
+// set data balken aktiv oder inaktiv
+function setData(){
+    this.d=d;
+}
+ 
 function type(d) {
     d.VariationID = +d.VariationID; // coerce to number
     return d;
   }
 };
 function redraw(){
-//	coverage(d);
+	coverage(d);
 };
 //};

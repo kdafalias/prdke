@@ -107,29 +107,39 @@
 		</main>
 		<script>window.jquery || document.write('<script src="js/jquery-3.1.0.js"><\/script>');</script>
 		<script type="text/javascript">
-              $(document).ready(function(){
-                sendWebRequest();
+			 $(document).ready(function(){
+                sendWebRequest();	// initial werden alle daten angezeigt
                 $('.menubutton').click(function(){
                     $('nav').slideToggle('slow');
                 });
+				 
+				 // click function, für die Varianten
                 $('div#e4').on('click',"rect",function(event){
-                 	event.stopPropagation();
-                  if(allCoverage) $('div#e4 rect.coverage').addClass("covInactive");
-                  allCoverage = false;
-                  if($(this).hasClass("covInactive")){
-                    $(this).removeClass("covInactive");
-                    variations.push($(this).attr('data-id'));
-                  }
-                  else
-                  {
-                    $(this).addClass("covInactive");
-                    variations.splice(variations.indexOf($(this).attr('data-id')),1);
-                  }
+                 	event.stopPropagation();					
+					var id=$(this).attr('data-id');	// VariationID des geclickten rect's
+					d=getDat();	// Datenobjekt holen
+					// ganzes Array durchsuchen
+					$.each(d.Variation,function(index, o){
+						// id gefunden
+						if(o.VariationID==id){
+							// visible ist auf ja = true
+							if(o["vis"]==true){
+								o["vis"]=false;	
+								variations.push(id);
+								allCoverage = false;
+							// visible ist auf nein , kennzeichen wird wieder auf true gesetzt
+							// variations wird um dieses ergänzt
+							}else{
+								o["vis"]=true;
+								variations.splice(id,1);
+							}
+						}
+					});
                   sendWebRequest();
                 });
                $('div#e4').on('click','svg',function(event) {
                   allCoverage = true;
-                  $('div#e4 rect').removeClass("covInactive");
+                  highlightActivities(getDat());
                   variations = new Array();
                   sendWebRequest();
                 });

@@ -36,7 +36,7 @@ function print(){
 // Method to get inserted Query
 function getQuery(){
 	jsonStr = JSON.stringify({Object:request});
-	//console.log(jsonStr);
+	console.log(jsonStr);
 	// sending query is missing
 	return jsonStr;
 }

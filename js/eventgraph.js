@@ -151,7 +151,9 @@ function text(){
 };
 //Beschriftungen
 function MTime(data){
-	$("#navmiddle .txt").text( "Durchschnittliche Durchlaufzeit1: "+ data.MeanRuntime+" Stunden");
+	$("#navmiddle span").append("Durchschnittliche Durchlaufzeit1: "+ data.MeanRuntime+" Stunden"+"<br>");
+	$("#navmiddle span").append("Anzahl an Cases:"+data.NumCases+"<br>");
+	$("#navmiddle span").append("Anzahl an Aktivitäten:"+data.NumActivities);
 };
 
 //resize Eventgraph
