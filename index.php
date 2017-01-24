@@ -107,15 +107,15 @@
 		</main>
 		<script>window.jquery || document.write('<script src="js/jquery-3.1.0.js"><\/script>');</script>
 		<script type="text/javascript">
-                $(document).ready(function(){
+              $(document).ready(function(){
+                sendWebRequest();
                 $('.menubutton').click(function(){
                     $('nav').slideToggle('slow');
                 });
                 $('div#e4').on('click',"rect",function(event){
-					
-             	event.stopPropagation();
-                  if(allCoverage) $('rect.coverage').addClass("covInactive");
-                  		allCoverage = false;
+                 	event.stopPropagation();
+                  if(allCoverage) $('div#e4 rect.coverage').addClass("covInactive");
+                  allCoverage = false;
                   if($(this).hasClass("covInactive")){
                     $(this).removeClass("covInactive");
                     variations.push($(this).attr('data-id'));
@@ -125,12 +125,11 @@
                     $(this).addClass("covInactive");
                     variations.splice(variations.indexOf($(this).attr('data-id')),1);
                   }
-                  console.log(variations);
                   sendWebRequest();
                 });
-               $('div#e4').on('click','g.y.axis',function(event) {
+               $('div#e4').on('click','svg',function(event) {
                   allCoverage = true;
-                  $('rect.coverage').removeClass("covInactive");
+                  $('div#e4 rect').removeClass("covInactive");
                   variations = new Array();
                   sendWebRequest();
                 });

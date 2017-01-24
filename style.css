@@ -334,10 +334,6 @@ path.chord {
         cursor: pointer;
 }
 
-.covInactive {
-    background: #d9d9d9 !important;
-}
-
 .covLabel{
 	font-size: 70%;
 	color:#fff;
@@ -393,6 +389,11 @@ footer ul li .logo{
   font: 10px sans-serif;
   text-anchor: end; 
 }
+
+#e4 rect.covInactive {
+    fill: #d9d9d9 !important;
+}
+
 
 .axis text{
   font: 10px sans-serif;

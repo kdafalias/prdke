@@ -24,6 +24,13 @@ function sendWebRequest(){
 	});
 }
 
+function highlightActivities(json)
+{
+  if(allCoverage) $('div#e4 rect').removeClass("covInactive");
+//  else 
+    $('div#e4 rect').addClass("covInactive");
+}
+
 // draw graps and illustrate informations
 function drawGraph(json){
 	graph(json,1200,600);
@@ -32,4 +39,5 @@ function drawGraph(json){
 	bchart(json);
 	chord(json);
 	coverage(json);
+  highlightActivities(json);
 }

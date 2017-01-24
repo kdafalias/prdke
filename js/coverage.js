@@ -37,7 +37,14 @@ d3.json(json, function(error, data){
                     .attr("transform", function(d, i){
                       return "translate("+x(d.VariationID)+", 0)";
                     });
-  
+  var sClass = 'coverage';
+  variations.every(function(value, index, array)
+  {
+      console.log(value);
+      console.log(data);
+    if(value == data['VariationID']) alert("gefunden"+value);
+  });
+
 	// balken
   bar.append("rect")
       .attr("y", function(d) { 
@@ -49,7 +56,7 @@ d3.json(json, function(error, data){
       .attr("height", function(d) { 
         return height - y(d.num); 
       })
-  		.attr("class","coverage")
+  		.attr("class",sClass)
   		.attr("data-id", function(d){
     		return d.VariationID;
 		})  
@@ -82,6 +89,6 @@ function type(d) {
   }
 };
 function redraw(){
-	coverage(d);
+//	coverage(d);
 };
 //};
