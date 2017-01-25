@@ -153,7 +153,7 @@ function text(){
 function MTime(data){
 	$("#navmiddle span").text("");
 	$("#navmiddle span").append("Durchschnittliche Durchlaufzeit1: "+ data.MeanRuntime+" Stunden"+"<br>");
-	$("#navmiddle span").append("Anzahl an Cases:"+data.NumCases+"<br>");
+	$("#navmiddle span").append("Anzahl an Variationen:"+data.NumVariations+"<br>");
 	$("#navmiddle span").append("Anzahl an Aktivitäten:"+data.NumActivities);
 };
 

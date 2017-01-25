@@ -325,6 +325,10 @@ path.chord {
 	width:100%;
 	  padding : 10px;
 }
+
+#e4 g{
+    cursor: pointer;
+}
 .coverage{
 	display: inline-block;
 	box-sizing: border-box;
