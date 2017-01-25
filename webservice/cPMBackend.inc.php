@@ -16,6 +16,23 @@ class cPMBackend extends cGeneric
   private $aQuery = array();
   
   /**
+   * Returns SQL fragment to filter for process variations
+   * 
+   * @param string $sTable DB-Table (prozessteilschritte or prozessvarianten)
+   * @return string SQL-Fragment
+   */
+  private function get_variationfilter($sTable)
+  {
+    $sWhere = '';
+    if(!empty($this->aVarianten))
+    {
+      $sVarianten = implode(',', $this->aVarianten);
+      $sWhere = " AND $sTable.ProzessvariantenID IN($sVarianten)";
+    }
+    return $sWhere;
+  }
+  
+  /**
    * Returns all nodes i.e. activities
    * @return array
    */
@@ -23,9 +40,10 @@ class cPMBackend extends cGeneric
   {
     $sFilter = "";
     $aNodes = array();
-    #$sLimit = empty($this->numActivities) ? '' : "LIMIT ".$this->numActivities;
+    $sWhere = $this->get_variationfilter('prozessteilschritte');
     $sQuery = "SELECT SUM(Haeufigkeit) AS anzahl, Aktivitaet, aktivitaeten_ID FROM prozessteilschritte "
             . "INNER JOIN aktivitaeten ON prozessteilschritte.aktivitaeten_ID = aktivitaeten.ID "
+            . "WHERE 1=1 $sWhere "
             . "GROUP BY Aktivitaeten_ID "
             . "ORDER BY anzahl DESC;";
     $oTable = $this->oDB->query($sQuery);
@@ -58,11 +76,7 @@ class cPMBackend extends cGeneric
     }
     
     // Filter: Only given processes are returned
-    if(!empty($this->aVarianten))
-    {
-      $sVarianten = implode(',', $this->aVarianten);
-      $sWhere .= " AND prozessteilschritte.ProzessvariantenID IN($sVarianten)";
-    }
+    $sWhere .= $this->get_variationfilter('prozessteilschritte');
     $sQuery = "SELECT SUM(prozessteilschritte.Haeufigkeit) AS num, ak1.Aktivitaet AS target, ak2.Aktivitaet AS source,"
             . " AVG(prozessteilschritte.Durchlaufzeit) AS time, Knotentyp AS type, aktivitaeten_ID, aktivitaeten_VG_ID, "
             . " COUNT(DISTINCT ProzessteilschrittID) AS numAct"
@@ -171,7 +185,9 @@ class cPMBackend extends cGeneric
   private function get_Meantime()
   {
     $sFilter = "";
-    $sQuery = "SELECT AVG(Durchlaufzeit) AS average FROM prozessvarianten $sFilter;";
+    // Filter: Only given processes are returned
+    $sWhere = $this->get_variationfilter('prozessvarianten');
+    $sQuery = "SELECT AVG(Durchlaufzeit) AS average FROM prozessvarianten WHERE 1=1 $sFilter;";
     $oTable = $this->oDB->query($sQuery);
     if($aRow = $oTable->fetch_assoc())
     {
@@ -192,8 +208,8 @@ class cPMBackend extends cGeneric
     $this->abdeckung = !empty($_REQUEST['abdeckung']) ? intval($_REQUEST['abdeckung']) : null;
     $this->aVarianten = !empty($_REQUEST['varianten']) ? $_REQUEST['varianten'] : array();
     $this->aQuery = !empty($_REQUEST['query']) ? $_REQUEST['query'] : array();
-    $aNodes = $this->get_nodes();
     $aReturnVarianten = $this->get_Variation();
+    $aNodes = $this->get_nodes();
     $aReturn = array('nodes'=>$aNodes,
         'Variation'=>$aReturnVarianten,
         'edges'=>$this->get_edges(),
