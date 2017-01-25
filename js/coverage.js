@@ -30,7 +30,10 @@ d3.json(json, function(error, data){
 	data=json.Variation;
   x.domain(data.map(function(d){ return d.VariationID}));
   y.domain([0, d3.max(data, function(d){return d.num})]);
-  
+
+	margin.left=x.rangeBand();
+	margin.right=x.rangeBand();
+	
   var bar = chart.selectAll("g")
                     .data(data)
                   .enter()
@@ -52,7 +55,7 @@ d3.json(json, function(error, data){
         return y(d.num); 
       })
       .attr("x", function(d,i){
-        return x.rangeBand()+(margin.left/4);
+        return x.rangeBand()+(margin.left/data.length);
       })
       .attr("height", function(d) { 
         return height - y(d.num); 
@@ -84,7 +87,7 @@ d3.json(json, function(error, data){
         .call(yAxis)
         .append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", 0)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Anzahl");
