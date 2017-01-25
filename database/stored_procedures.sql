@@ -54,7 +54,7 @@ BEGIN
 				SET procString = CONCAT(Akt_act,";");
 				SET runtime = 0;
 				SET totalRuntime = 0;
-				SET Akt_before = 1;
+				SET Akt_before = 0;
 			END IF;
 			INSERT INTO teilschritt_tmp(durchlaufzeit, aktiv, aktiv_vg, CaseID) VALUES(runtime, Akt_act, Akt_before, Case_act);
 			SET TS_before = TS_act;
