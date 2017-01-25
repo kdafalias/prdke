@@ -42,7 +42,7 @@ function highlightActivities(json)
 function drawGraph(json) {
   graph(json, 1200, 600);
   MTime(json);
-  text();///file:/C:/Users/Wolfgang/Documents/UNI/Praktikum%20DKE/Frontend_neu/index.html
+  text();
   bchart(json);
   chord(json);
   highlightActivities(json);	// vor coverage aufruf alle mit vis:true kennzeichnen

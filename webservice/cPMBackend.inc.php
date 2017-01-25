@@ -3,16 +3,41 @@
 include_once dirname(__FILE__).'/../inc/cGeneric.inc.php';
 
 /**
- * Description of cPMBackend
+ * Webservice-Class
+ * Receives filter values from frontend and calculates response
  *
  * @author Dino
  */
 class cPMBackend extends cGeneric
 {
+  /**
+   * All activities
+   * @var array 
+   */
   private $aAktivitaeten = array();
+  
+  /**
+   * Number of activities in the returned processes (e.g. 5 - only processes with 5 activities are returned)
+   * @var integer 
+   */
   private $numActivities = null;
+  
+  /**
+   * Coverage (in percent)
+   * @var integer 
+   */
   private $abdeckung = null;
+  
+  /**
+   * Selected variations
+   * @var array 
+   */
   private $aVarianten = array();
+  
+  /**
+   * Process query array: Every array item is a query item
+   * @var array 
+   */
   private $aQuery = array();
   
   /**
@@ -110,6 +135,7 @@ class cPMBackend extends cGeneric
   }
   
   /**
+   * Return interdependency (in pairs) between activities
    * 
    * @return array 
    */
@@ -200,7 +226,7 @@ class cPMBackend extends cGeneric
   }
   
   /**
-   * Hauptmethode, 
+   * Main method, sets filters in object and calls sub methods 
    */
   public function getEventData()
   {

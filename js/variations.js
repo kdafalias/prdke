@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
-
+/**
+ * JQuery handler: When document ready
+ * 
+ */
 $(document).ready(function () {
   sendWebRequest();	// initial werden alle daten angezeigt
   $('.menubutton').click(function () {
@@ -36,6 +39,7 @@ $(document).ready(function () {
     console.log(variations);
     sendWebRequest();
   });
+  // Reset filter of variation graph
   $('div#e4').on('click', 'svg', function (event) {
     allCoverage = true;
     highlightActivities(getDat());

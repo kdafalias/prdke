@@ -65,10 +65,6 @@ class cExcelImport extends cGeneric
       {
         $iCaseID = $iParentCaseID;
       }
-//      echo('<pre>');
-//      print_r($aRow);
-//      echo('</pre>');
-//      echo($iCaseID."<br>");
       $sWhere = '';
       $sID = '';
       $iPrimID = null;
@@ -88,7 +84,6 @@ class cExcelImport extends cGeneric
         $sQueryIns = "INSERT INTO eventlog(EventID, Timestamp, Aktivitaeten_ID, CaseID) "
                 . "SELECT CONCAT({$sIdName}) AS ID, {$aRowAct['TSFeld']}, {$aRowAct['ID']}, $iCaseID FROM {$aRowAct['tabelle']} WHERE 1=1 $sWhere;";
         $this->oDB->query($sQueryIns);
-//        echo($sQueryIns."<br>");
       }
       // Änderungshistorie für die jeweilige Tabelle mit berücksichtigen
       $this->oDB->query("UPDATE Aenderungshistorie SET CaseID = $iCaseID WHERE Tabelle = '{$aTable['table']}' AND ID = {$sID}");
@@ -119,7 +114,15 @@ class cExcelImport extends cGeneric
    */
   protected function cleanData()
   {
-    
+    $sQuery = "DELETE FROM aenderungshistorie WHERE CaseID = 0;"
+            . "DELETE FROM bestellposition WHERE CaseID = 0;"
+            . "DELETE FROM bestellung WHERE CaseID = 0;"
+            . "DELETE FROM eventlog WHERE CaseID = 0;"
+            . "DELETE FROM kreditor WHERE CaseID = 0;"
+            . "DELETE FROM rechnung WHERE CaseID = 0;"
+            . "DELETE FROM wareneingang WHERE CaseID = 0;"
+            . "DELETE FROM zahlung WHERE CaseID = 0;";
+    $this->oDB->query($sQuery);
   }
 
 
@@ -134,6 +137,7 @@ class cExcelImport extends cGeneric
     $this->oDB->query("TRUNCATE Cases");
     $this->oDB->query('TRUNCATE eventlog');
     
+    // Hierarchischer Array der Tabellen
     $aTables = array(      
           array( 'table'=>'Bestellposition', 'idname'=>array('PosNr', 'BestellNr'),'fkname'=>array(), 
               'children'=>array(
@@ -179,12 +183,13 @@ class cExcelImport extends cGeneric
       echo($this->oDB->error." ({$this->oDB->errno})<br>");
       echo($sQuery."<br>");
     }
+    // Alle Worksheets durchgehen
     foreach($oImportExcel->getWorksheetIterator() as $iWorksheetNum=>$oWorksheet)
     {
       // 1. Worksheet nicht
       if($iWorksheetNum)
       {
-        echo($oWorksheet->getTitle()." $iWorksheetNum<br>");
+        // Worksheet-Name = Tabellenname
         $sQuery = "TRUNCATE TABLE {$this->aSheets[$i]['tablename']};";
         $this->oDB->query($sQuery);
         if(!$hResult = $this->oDB->query($sQuery))
@@ -193,20 +198,21 @@ class cExcelImport extends cGeneric
           echo($this->oDB->error." ({$this->oDB->errno})<br>");
           echo($sQuery."<br>");
         }
-
+        // Zeilenanzahl
         $iHighestRow = $oWorksheet->getHighestRow();
         for($iRow = $this->aSheets[$i]['rowstart']; $iRow<=$iHighestRow; $iRow++)
         {
           $sValues = '';
           $bHasValue = false;
+          // Alle Spalten durchgehen
           for($j=0; $j<$this->aSheets[$i]['cols']; $j++)
           {
             $sValues .= empty($sValues) ? '' : ',';
             $sValue = $oWorksheet->getCellByColumnAndRow($j, $iRow)->getValue();
-            if($this->aSheets[$i]['fields'][$j] == 'AenderTS') echo ($sValue."<br>");
             $bHasValue |= strlen($sValue) > 0;
             if(in_array($this->aSheets[$i]['fields'][$j], $aTimestampFields) && strlen($sValue))
             {
+              // Timestamp konvertieren
               $sValue = ($sValue - 25569) * 86400 - 7200;
               $sValues .= 'FROM_UNIXTIME('. $sValue . ')';
             }
@@ -227,7 +233,6 @@ class cExcelImport extends cGeneric
           }
           $sFields = implode(',', $this->aSheets[$i]['fields']);
           $sQuery = "INSERT INTO {$this->aSheets[$i]['tablename']}({$sFields}) VALUES($sValues)";
-          echo($sQuery."<br>");
           // Leerzeilen in Excel ignorieren
           if($bHasValue) 
           {

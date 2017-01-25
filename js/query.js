@@ -1,6 +1,21 @@
+/**
+ * Process Query Language: Build query from frontend
+ * @type Element
+ */
+
 var node= document.getElementById("request");
+/**
+ * Request-Array: collects all process query elements for sending to webservice
+ * 
+ * @type Array
+ */
 var request=[];
 var jsonStr="";
+
+/**
+ * Inserts next Element in query array
+ * @returns void
+ */
 function next(){
 	var curSelect = new Object();
     curSelect.yesNo = document.getElementById("yesNo").options[document.getElementById("yesNo").selectedIndex].value;

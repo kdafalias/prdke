@@ -76,7 +76,7 @@
                     <input type="radio" id="anz" name="type" onChange="text()" ><label for="anz" >  Anzahl</label></h2>
                 <div id="chart">
                     <script type="text/javascript">
-
+                      // Initiale Anforderung der Daten
                       sendWebRequest();
                     </script>
                 </div>
@@ -113,8 +113,6 @@
             reposChord();
             reposEvent();
             redraw();
-            //document.getElementById("1a").innerHTML=window.innerWidth;
-            //document.getElementById("2a").innerHTML=window.innerHeight;
           };
 
         </script>

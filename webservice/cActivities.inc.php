@@ -2,7 +2,7 @@
 include_once dirname(__FILE__).'/../inc/cGeneric.inc.php';
 
 /**
- * Description of cActivities
+ * All activities for dropdown field
  *
  * @author Dino
  */
